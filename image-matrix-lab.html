@@ -162,8 +162,15 @@ canvas{ display:block; image-rendering:auto }
 footer{ text-align:center; color:var(--dim); padding:2rem 1rem 3rem; font-size:.9rem }
 @media (max-width:900px){ .grid3,.grid2{ grid-template-columns:1fr } header h1{ font-size:1.9rem } }
 </style>
+
+<style id="mathcode-hub-style">
+.mathcode-hub-return{position:fixed;left:16px;top:14px;z-index:9999;padding:9px 12px;border-radius:10px;border:1px solid rgba(137,168,230,.32);background:rgba(5,9,17,.82);backdrop-filter:blur(12px);color:#eaf1ff;text-decoration:none;font:700 12px system-ui;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.mathcode-hub-return:hover{border-color:#22d3ee;color:#22d3ee}
+@media(max-width:640px){.mathcode-hub-return{top:auto;bottom:12px;left:12px}}
+</style>
 </head>
 <body>
+<a class="mathcode-hub-return" href="index.html#labs">⬡ MathCode Studio · All Labs</a>
 <header>
   <div class="topbar">
     <button id="btnClassroom" onclick="toggleClassroom()">CLASSROOM MODE</button>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Careers — FREEAI</title>
+<title>Careers — MathCode Studio</title>
 <meta name="description" content="10 careers that run on linear algebra — the math you'll use, the salaries, and which lab to start with." />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
 <style>
 /* ============================================================
-   FREEAI — CAREERS
+   MathCode Studio — CAREERS
    Careers built on linear algebra.
    ============================================================ */
 :root{
@@ -57,7 +57,7 @@ nav{
 .nav-links a{padding:8px 14px;border-radius:10px;font-size:13.5px;font-weight:600;color:var(--dim);transition:all .2s;letter-spacing:.3px}
 .nav-links a:hover{color:var(--txt);background:rgba(122,153,224,.08)}
 .nav-links a.on{color:var(--cyan);background:rgba(34,211,238,.08);box-shadow:inset 0 0 0 1px rgba(34,211,238,.25)}
-@media(max-width:640px){.nav-links a span{display:none}.nav-links a{padding:8px 10px}}
+@media(max-width:640px){.brand{letter-spacing:1px;font-size:14px}.brand small{display:none}.nav-links a span{display:none}.nav-links a{padding:8px 9px}}
 
 main{position:relative;z-index:2}
 
@@ -149,8 +149,9 @@ main{position:relative;z-index:2}
 .pillars-sec{padding:40px 20px 80px;max-width:1200px;margin:0 auto}
 .pillars-sec h2{font-family:var(--disp);font-size:clamp(24px,3.4vw,38px);font-weight:700;text-align:center}
 .pillars-sec .sub{text-align:center;color:var(--dim);max-width:600px;margin:10px auto 40px}
-.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-@media(max-width:900px){.pgrid{grid-template-columns:1fr}}
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+@media(max-width:1050px){.pgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.pgrid{grid-template-columns:1fr}}
 .pillar{position:relative;text-align:center;padding:34px 24px;border-radius:20px;overflow:hidden;background:linear-gradient(180deg,rgba(17,25,47,.7),rgba(9,14,27,.7));border:1px solid var(--line);backdrop-filter:blur(8px);transition:all .3s}
 .pillar:hover{transform:translateY(-6px);border-color:var(--line2);box-shadow:0 26px 60px -20px rgba(0,0,0,.75),0 0 40px -10px rgba(34,211,238,.3)}
 .pillar .pnum{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:2px;color:var(--faint)}
@@ -205,9 +206,10 @@ nav.scrolled{background:rgba(5,8,15,.9);box-shadow:0 6px 26px rgba(0,0,0,.45)}
 <div class="sprog" aria-hidden="true"><i></i></div>
 
 <nav>
-  <a class="brand" href="index.html"><span class="mark">⬡</span>FREEAI<small>· MATH → CODE</small></a>
+  <a class="brand" href="index.html"><span class="mark">⬡</span><span class="brand-name">MATHCODE</span><small>STUDIO · MATH → CODE</small></a>
   <div class="nav-links">
     <a href="index.html">⚡ <span>Hub</span></a>
+    <a href="index.html#labs">◫ <span>Labs</span></a>
     <a href="applications.html">🌌 <span>Applications</span></a>
     <a class="on" href="careers.html">🚀 <span>Careers</span></a>
   </div>
@@ -232,7 +234,7 @@ nav.scrolled{background:rgba(5,8,15,.9);box-shadow:0 6px 26px rgba(0,0,0,.45)}
   <!-- ============ CAREER CARDS ============ -->
   <section class="careers-sec">
     <h2 class="reveal">10 careers that pay you to love matrices</h2>
-    <p class="sub reveal">Each card shows the math you'll actually use on the job, the demand, and the freeai lab that starts you on the path.</p>
+    <p class="sub reveal">Each card shows the math you'll actually use on the job, the demand, and the MathCode Studio lab that starts you on the path.</p>
     <div class="career-grid">
 
       <div class="job reveal" style="--acc:var(--green)" data-demand="5">
@@ -260,7 +262,7 @@ nav.scrolled{background:rgba(5,8,15,.9);box-shadow:0 6px 26px rgba(0,0,0,.45)}
           <div class="bar"><i></i></div>
           <div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
         </div>
-        <a class="lab" href="how-does-a-machine-learn.html" target="_blank" rel="noopener">Start with Lab 03 <span class="larr">→</span></a>
+        <a class="lab" href="recommendation-engine-lab.html" target="_blank" rel="noopener">Start with Lab 04 <span class="larr">→</span></a>
       </div>
 
       <div class="job reveal" style="--acc:var(--violet)" data-demand="4">
@@ -398,8 +400,8 @@ nav.scrolled{background:rgba(5,8,15,.9);box-shadow:0 6px 26px rgba(0,0,0,.45)}
 
   <!-- ============ PILLARS ============ -->
   <section class="pillars-sec">
-    <h2 class="reveal">One course. Three ideas. All careers.</h2>
-    <p class="sub reveal">Every career above is built on the same three pillars — the exact things you'll build by hand in the labs.</p>
+    <h2 class="reveal">One course. Four mathematical instincts. All careers.</h2>
+    <p class="sub reveal">Every career above is strengthened by the same four instincts — the exact things you will build by hand in the labs.</p>
     <div class="pgrid">
       <div class="pillar reveal">
         <span class="pnum">PILLAR 01</span>
@@ -422,6 +424,13 @@ nav.scrolled{background:rgba(5,8,15,.9);box-shadow:0 6px 26px rgba(0,0,0,.45)}
         <p>Some directions barely change when a matrix acts on them. Those are the stable directions — of the web, of risk, of data. Find them, and you've found the truth.</p>
         <div class="peq">A · v = λ · v</div>
       </div>
+      <div class="pillar reveal">
+        <span class="pnum">PILLAR 04</span>
+        <span class="pico">🎬</span>
+        <h3>Similarity becomes prediction</h3>
+        <p>Users and items become vectors. Angles measure taste, neighbours contribute evidence, and a ranking rule turns those numbers into a decision.</p>
+        <div class="peq">sim(p,x) = (p·x)/(‖p‖‖x‖)</div>
+      </div>
     </div>
   </section>
 
@@ -433,13 +442,14 @@ nav.scrolled{background:rgba(5,8,15,.9);box-shadow:0 6px 26px rgba(0,0,0,.45)}
       <a class="cta-btn" href="image-matrix-lab.html" target="_blank" rel="noopener">🖼️ Lab 01 — Image Matrix</a>
       <a class="cta-btn" href="build-a-mini-google.html" target="_blank" rel="noopener">🔍 Lab 02 — Mini Google</a>
       <a class="cta-btn alt" href="how-does-a-machine-learn.html" target="_blank" rel="noopener">🧠 Lab 03 — Machine Learn</a>
+      <a class="cta-btn alt" href="recommendation-engine-lab.html" target="_blank" rel="noopener">🎬 Lab 04 — Recommendation Engine</a>
     </div>
     <div style="margin-top:18px"><a class="cta-btn alt" href="index.html">⬡ Back to the hub</a></div>
   </section>
 </main>
 
 <footer>
-  <b>FREEAI</b> · Linear Algebra &amp; Calculus course orientation · built for 3rd-semester BTech AI/ML
+  <b>MathCode Studio</b> · Linear Algebra &amp; Calculus course orientation · built for 3rd-semester BTech AI/ML
 </footer>
 
 <script>

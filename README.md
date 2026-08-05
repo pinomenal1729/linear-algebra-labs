@@ -1,27 +1,39 @@
-# FREEAI — Linear Algebra Website
+# MathCode Studio — Final GitHub Pages Build
 
-Static website prepared for GitHub Pages.
+This is a static website that can be deployed directly with GitHub Pages.
 
-## Structure
+## Files
 
-- `index.html` — homepage
-- `applications.html` — applications page
-- `careers.html` — careers page
-- `simulation/` — three interactive labs
-- `.nojekyll` — tells GitHub Pages to publish the files directly
+- `index.html` — redesigned 3D hub with four simulation labs
+- `image-matrix-lab.html` — Lab 01
+- `build-a-mini-google.html` — Lab 02
+- `how-does-a-machine-learn.html` — Lab 03
+- `recommendation-engine-lab.html` — Lab 04
+- `applications.html`
+- `careers.html`
+- `.nojekyll`
 
-## Publish with GitHub Pages
+## Publish or update on GitHub
 
-1. Create a new public GitHub repository.
-2. Upload the **contents of this folder** to the repository root.
-3. Open **Settings → Pages**.
-4. Under **Build and deployment**, choose **Deploy from a branch**.
-5. Select branch **main** and folder **/(root)**, then click **Save**.
+1. Extract the ZIP.
+2. Upload all files directly into the repository root.
+3. Replace the older files when GitHub asks.
+4. Commit the changes.
+5. In **Settings → Pages**, publish from `main` and `/ (root)`.
+6. Hard-refresh the live site after deployment.
 
-Your URL will normally be:
+The repository root must contain `index.html`; do not place these files inside another enclosing folder.
 
-`https://YOUR-USERNAME.github.io/REPOSITORY-NAME/`
+## Lab 04 mathematics
 
-## Note about notebook buttons
+The recommendation lab uses:
 
-The homepage contains download links for files under `python/*.ipynb`. Those notebook files were not included in the supplied website files, so those download links will return 404 until the notebooks are added in a `python` folder or the links are removed.
+- a 10-dimensional user/item feature representation,
+- mean-centred ratings,
+- a weighted rating-derived profile,
+- explicit-preference blending,
+- cosine similarity,
+- a synthetic-neighbour collaborative score,
+- and diversity-aware greedy ranking.
+
+This is an educational simulation. Its viewing-community data is synthetic and its item features are hand-built.

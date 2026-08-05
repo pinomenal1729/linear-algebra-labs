@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Applications — FREEAI</title>
+<title>Applications — MathCode Studio</title>
 <meta name="description" content="12 real-world places linear algebra secretly runs the show — from game engines and Netflix to GPS and quantum computing." />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌌</text></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
 <style>
 /* ============================================================
-   FREEAI — APPLICATIONS
+   MathCode Studio — APPLICATIONS
    Where linear algebra secretly runs the real world.
    ============================================================ */
 :root{
@@ -59,7 +59,7 @@ nav{
 .nav-links a{padding:8px 14px;border-radius:10px;font-size:13.5px;font-weight:600;color:var(--dim);transition:all .2s;letter-spacing:.3px}
 .nav-links a:hover{color:var(--txt);background:rgba(122,153,224,.08)}
 .nav-links a.on{color:var(--cyan);background:rgba(34,211,238,.08);box-shadow:inset 0 0 0 1px rgba(34,211,238,.25)}
-@media(max-width:640px){.nav-links a span{display:none}.nav-links a{padding:8px 10px}}
+@media(max-width:640px){.brand{letter-spacing:1px;font-size:14px}.brand small{display:none}.nav-links a span{display:none}.nav-links a{padding:8px 9px}}
 
 main{position:relative;z-index:2}
 
@@ -199,9 +199,10 @@ nav.scrolled{background:rgba(5,8,15,.9);box-shadow:0 6px 26px rgba(0,0,0,.45)}
 <div class="sprog" aria-hidden="true"><i></i></div>
 
 <nav>
-  <a class="brand" href="index.html"><span class="mark">⬡</span>FREEAI<small>· MATH → CODE</small></a>
+  <a class="brand" href="index.html"><span class="mark">⬡</span><span class="brand-name">MATHCODE</span><small>STUDIO · MATH → CODE</small></a>
   <div class="nav-links">
     <a href="index.html">⚡ <span>Hub</span></a>
+    <a href="index.html#labs">◫ <span>Labs</span></a>
     <a class="on" href="applications.html">🌌 <span>Applications</span></a>
     <a href="careers.html">🚀 <span>Careers</span></a>
   </div>
@@ -307,6 +308,7 @@ nav.scrolled{background:rgba(5,8,15,.9);box-shadow:0 6px 26px rgba(0,0,0,.45)}
         <h3>Recommendation Engines</h3>
         <p>Netflix's famous problem: a users × movies matrix that is almost all empty. Factorize it (A ≈ U·Vᵀ) and the gaps fill themselves with your next favorite show.</p>
         <div class="math">A ≈ U · Vᵀ</div>
+        <a class="lab" href="recommendation-engine-lab.html" target="_blank" rel="noopener">↳ build this in Lab 04 <span class="larr">→</span></a>
       </div>
 
       <div class="app reveal" style="--acc:var(--cyan)" data-eq="|ψ′⟩ = U·|ψ⟩">
@@ -355,16 +357,16 @@ nav.scrolled{background:rgba(5,8,15,.9);box-shadow:0 6px 26px rgba(0,0,0,.45)}
   <!-- ============ CTA ============ -->
   <section class="cta-sec">
     <h2 class="reveal">Now go build the math yourself</h2>
-    <p class="reveal">Every application above is powered by the same three ideas you can experiment with hands-on.</p>
+    <p class="reveal">Every application above is powered by mathematical representations you can experiment with hands-on in four interactive labs.</p>
     <div class="cta-row reveal">
-      <a class="cta-btn" href="index.html">⬡ Back to the hub</a>
+      <a class="cta-btn" href="index.html#labs">⬡ Explore all four labs</a>
       <a class="cta-btn alt" href="careers.html">🚀 Who gets paid to do this? <span class="arr">→</span></a>
     </div>
   </section>
 </main>
 
 <footer>
-  <b>FREEAI</b> · Linear Algebra &amp; Calculus course orientation · built for 3rd-semester BTech AI/ML
+  <b>MathCode Studio</b> · Linear Algebra &amp; Calculus course orientation · built for 3rd-semester BTech AI/ML
 </footer>
 
 <script>
