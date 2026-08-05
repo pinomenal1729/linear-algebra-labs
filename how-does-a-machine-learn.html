@@ -205,16 +205,13 @@ footer{position:relative; z-index:2; text-align:center; color:var(--faint); font
 .tbl th{color:var(--faint); background:rgba(21,34,56,.5); font-size:13px; text-transform:uppercase; letter-spacing:.5px}
 .legend{display:flex; gap:14px; flex-wrap:wrap; font-size:13px; color:var(--dim); margin:8px 0}
 .legend i{display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:5px}
-</style>
 
-<style id="mathcode-hub-style">
-.mathcode-hub-return{position:fixed;left:16px;top:14px;z-index:9999;padding:9px 12px;border-radius:10px;border:1px solid rgba(137,168,230,.32);background:rgba(5,9,17,.82);backdrop-filter:blur(12px);color:#eaf1ff;text-decoration:none;font:700 12px system-ui;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-.mathcode-hub-return:hover{border-color:#22d3ee;color:#22d3ee}
-@media(max-width:640px){.mathcode-hub-return{top:auto;bottom:12px;left:12px}}
+/* ===== Educational companion sections ===== */
+.edu-pack{margin-top:18px;display:grid;gap:18px}.edu-panel{background:linear-gradient(180deg,rgba(13,20,34,.96),rgba(8,13,23,.95));border:1px solid var(--line);border-radius:18px;padding:20px}.edu-panel h2{font-size:clamp(22px,2.4vw,30px);margin-bottom:8px}.edu-panel p{color:var(--dim)}.edu-kicker{display:inline-flex;padding:7px 12px;border-radius:999px;border:1px solid var(--line2);background:rgba(255,255,255,.04);font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:var(--cyan);margin-bottom:10px}.edu-grid2,.edu-grid3{display:grid;gap:16px}.edu-grid2{grid-template-columns:1fr 1fr}.edu-grid3{grid-template-columns:repeat(3,1fr)}@media(max-width:920px){.edu-grid2,.edu-grid3{grid-template-columns:1fr}}.edu-mini{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:14px;padding:16px}.edu-mini h3{font-size:18px;margin-bottom:6px}.edu-mini ul{padding-left:18px;color:var(--dim)}.edu-mini li+li{margin-top:8px}.edu-call{padding:16px 18px;border-left:4px solid var(--amber);background:rgba(251,191,36,.08);border-radius:0 12px 12px 0;color:var(--txt)}.qa details{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:14px;padding:14px 16px}.qa details+details{margin-top:10px}.qa summary{cursor:pointer;font-weight:700;color:var(--txt)}.qa p{margin-top:10px;color:var(--dim)}.edu-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.edu-link{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);font-size:13px;font-weight:700;color:var(--txt);text-decoration:none}
+
 </style>
 </head>
 <body>
-<a class="mathcode-hub-return" href="index.html#labs">⬡ MathCode Studio · All Labs</a>
 <div class="grid-bg"></div>
 <!-- ============================================================ header -->
 <header>
@@ -569,6 +566,28 @@ footer{position:relative; z-index:2; text-align:center; color:var(--faint); font
     </div>
   </div>
 </section>
+
+  <section class="edu-pack">
+    <div class="edu-panel">
+      <div class="edu-kicker">Before you learn, try this</div>
+      <h2>How Does a Machine Learn? — Curiosity Prompt</h2>
+      <div class="edu-call">If a model makes a wrong prediction, how can it know which direction to adjust its parameters? Imagine the error as a landscape — where should the model move next?</div>
+      <div class="edu-links"><a class="edu-link" href="why-linear-algebra.html">🧭 Why are we learning this?</a><a class="edu-link" href="glossary.html">📘 Open the glossary</a></div>
+    </div>
+    <div class="edu-grid2">
+      <div class="edu-panel edu-mini"><h3>What you just discovered</h3><ul><li>A model uses parameters to map inputs to outputs.</li><li>Loss measures how wrong the model currently is.</li><li>The gradient tells the direction of steepest increase, so moving against it reduces error step by step.</li></ul></div>
+      <div class="edu-panel edu-mini"><h3>Why this matters</h3><ul><li>Machine learning and AI training</li><li>Optimization in engineering</li><li>Fitting data and predictive modelling</li></ul></div>
+    </div>
+    <div class="edu-grid2">
+      <div class="edu-panel"><div class="edu-kicker">Quick check</div><h2>Test your understanding</h2><div class="qa"><details><summary>What is the role of the loss function?</summary><p>It measures how wrong the model is.</p></details><details><summary>Why do we move opposite to the gradient?</summary><p>Because the gradient points uphill; moving opposite to it takes us downhill and reduces loss.</p></details><details><summary>True or false: one step of gradient descent always gives the final answer.</summary><p>False — learning is iterative and usually needs many updates.</p></details></div></div>
+      <div class="edu-panel edu-mini"><h3>Common mistakes students make</h3><ul><li>Confusing the model output with the loss value.</li><li>Choosing a step size that is too large and overshoots.</li><li>Thinking learning is magic instead of repeated numerical correction.</li></ul></div>
+    </div>
+    <div class="edu-grid2">
+      <div class="edu-panel edu-mini"><h3>Reflection prompt</h3><ul><li>What does the loss surface help you visualize?</li><li>Why are many small corrections often better than one huge jump?</li><li>How is gradient descent similar to learning from mistakes in real life?</li></ul></div>
+      <div class="edu-panel edu-mini"><h3>Challenge mode</h3><p>Change the learning rate and predict whether the model will converge smoothly, oscillate, or diverge.</p><div class="edu-links"><a class="edu-link" href="index.html">⬡ Back to hub</a><a class="edu-link" href="glossary.html">📘 Review key words</a></div></div>
+    </div>
+  </section>
+
 </main>
 
 <footer>HOW DOES A MACHINE LEARN? — Calculus, Gradient Descent &amp; Optimization Lab · for the AI/ML course orientation</footer>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Glossary — MathCode Studio</title>
+<style>
+:root{--bg:#07101a;--bg2:#0e1726;--panel:#101c30;--line:#20314b;--txt:#dce7f5;--dim:#8ea2bf;--cyan:#4fd1ff;--violet:#a78bfa;--green:#34d399;--pink:#f472b6;--amber:#fbbf24;--shadow:0 14px 40px rgba(0,0,0,.28)}
+*{box-sizing:border-box;margin:0;padding:0} body{font-family:Inter,Segoe UI,system-ui,sans-serif;background:radial-gradient(900px 500px at 80% -10%,rgba(79,209,255,.12),transparent 60%),radial-gradient(700px 400px at 0% 100%,rgba(167,139,250,.10),transparent 55%),var(--bg);color:var(--txt);line-height:1.6}
+a{text-decoration:none;color:inherit}.wrap{max-width:1200px;margin:0 auto;padding:28px 20px 90px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:22px}.brand{font-weight:900;letter-spacing:.8px;font-size:20px}.brand span{color:var(--cyan)}.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border:1px solid var(--line);border-radius:12px;background:rgba(16,28,48,.76);font-weight:700}.hero{padding:24px 0 8px;text-align:center}.eyebrow{display:inline-block;padding:8px 14px;border-radius:999px;border:1px solid rgba(79,209,255,.28);background:rgba(79,209,255,.07);color:var(--cyan);font-size:12px;letter-spacing:2px;text-transform:uppercase}.hero h1{font-size:clamp(34px,6vw,72px);line-height:.95;margin:16px 0;background:linear-gradient(90deg,#fff,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{max-width:760px;margin:0 auto;color:var(--dim);font-size:18px}.search{margin:28px auto 14px;max-width:760px;background:rgba(16,28,48,.88);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}.search input{width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:var(--bg2);color:var(--txt);font-size:16px}.note{margin-top:10px;color:var(--dim);font-size:14px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:24px}@media(max-width:860px){.grid{grid-template-columns:1fr}}.card{background:linear-gradient(180deg,rgba(16,28,48,.95),rgba(9,14,25,.95));border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow)}.term{display:flex;justify-content:space-between;gap:12px;align-items:center}.term h2{font-size:26px}.tag{font-size:11px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);color:var(--cyan);text-transform:uppercase;letter-spacing:.8px;white-space:nowrap}.meaning{margin-top:10px;color:var(--dim);font-size:16px}.simple{margin-top:14px;padding:14px 16px;border-left:4px solid var(--amber);background:rgba(251,191,36,.08);border-radius:0 12px 12px 0}.simple b{color:var(--txt)}.example{margin-top:14px;padding:14px 16px;border-left:4px solid var(--green);background:rgba(52,211,153,.08);border-radius:0 12px 12px 0}.example code{color:var(--cyan);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.footer-box{margin-top:28px;background:rgba(16,28,48,.72);border:1px solid var(--line);border-radius:18px;padding:20px}.footer-box h3{font-size:24px;margin-bottom:8px}.footer-box p{color:var(--dim);margin-bottom:14px}.links{display:flex;gap:12px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="brand" href="index.html">MATHCODE <span>STUDIO</span></a>
+    <div class="links"><a class="btn" href="why-linear-algebra.html">🧭 Start Here</a><a class="btn" href="index.html">⬡ Back to Hub</a></div>
+  </div>
+  <section class="hero">
+    <div class="eyebrow">Glossary for beginners</div>
+    <h1>Understand the words.<br/>Understand the math.</h1>
+    <p>This page gives you plain-language meanings of the most important words you will meet in the labs. Read a definition, then connect it to a concrete example.</p>
+  </section>
+  <div class="search"><input id="glossSearch" placeholder="Search a term — vector, matrix, basis, eigenvalue, gradient..." /><div class="note">Tip: search by idea, not only by the exact term.</div></div>
+  <section class="grid" id="glossGrid">
+    <article class="card gloss-item" data-keywords="vector arrow direction magnitude point list numbers">
+      <div class="term"><h2>Vector</h2><span class="tag">building block</span></div>
+      <p class="meaning">A vector is an ordered collection of numbers. It can describe a point, a direction, a velocity, a preference profile, or a signal.</p>
+      <div class="simple"><b>In simple words:</b> a vector is a mathematical way of packaging information with position and order.</div>
+      <div class="example"><b>Example:</b> <code>[3, 1]</code> can mean “3 steps right and 1 step up.”</div>
+    </article>
+    <article class="card gloss-item" data-keywords="matrix table grid transformation coefficients numbers rows columns">
+      <div class="term"><h2>Matrix</h2><span class="tag">control panel</span></div>
+      <p class="meaning">A matrix is a rectangular table of numbers. It can store data, encode relationships, or act like a machine that transforms vectors.</p>
+      <div class="simple"><b>In simple words:</b> a matrix is often a compact recipe telling the system what to do.</div>
+      <div class="example"><b>Example:</b> a 2×2 matrix can rotate, stretch, reflect, or shear points in the plane.</div>
+    </article>
+    <article class="card gloss-item" data-keywords="linear transformation machine input output preserve add scaling">
+      <div class="term"><h2>Linear Transformation</h2><span class="tag">math machine</span></div>
+      <p class="meaning">A linear transformation is a rule that takes vectors as input and returns vectors as output while preserving addition and scaling.</p>
+      <div class="simple"><b>In simple words:</b> if you understand what the machine does to a few basic directions, you can predict what it does everywhere.</div>
+      <div class="example"><b>Example:</b> rotate every point by 90° or stretch the x-direction by a factor of 2.</div>
+    </article>
+    <article class="card gloss-item" data-keywords="basis basic directions spanning minimal independent">
+      <div class="term"><h2>Basis</h2><span class="tag">reference system</span></div>
+      <p class="meaning">A basis is a minimal set of vectors from which every vector in the space can be built uniquely.</p>
+      <div class="simple"><b>In simple words:</b> a basis is a set of basic directions powerful enough to describe the whole space.</div>
+      <div class="example"><b>Example:</b> in the plane, the vectors <code>(1,0)</code> and <code>(0,1)</code> form the standard basis.</div>
+    </article>
+    <article class="card gloss-item" data-keywords="span combinations build reachable">
+      <div class="term"><h2>Span</h2><span class="tag">what you can reach</span></div>
+      <p class="meaning">The span of a set of vectors is the set of all linear combinations of those vectors.</p>
+      <div class="simple"><b>In simple words:</b> span tells you all the places you can reach by combining some chosen directions.</div>
+      <div class="example"><b>Example:</b> the span of <code>(1,0)</code> and <code>(0,1)</code> is the entire plane.</div>
+    </article>
+    <article class="card gloss-item" data-keywords="independent redundant unnecessary combination">
+      <div class="term"><h2>Linear Independence</h2><span class="tag">no redundancy</span></div>
+      <p class="meaning">Vectors are linearly independent if none of them can be created from the others.</p>
+      <div class="simple"><b>In simple words:</b> every vector in the set contributes something genuinely new.</div>
+      <div class="example"><b>Example:</b> <code>(1,0)</code> and <code>(0,1)</code> are independent, but <code>(1,1)</code> and <code>(2,2)</code> are not.</div>
+    </article>
+    <article class="card gloss-item" data-keywords="rank information nonredundant rows columns">
+      <div class="term"><h2>Rank</h2><span class="tag">amount of information</span></div>
+      <p class="meaning">The rank of a matrix tells you how many independent rows or columns it truly contains.</p>
+      <div class="simple"><b>In simple words:</b> rank measures how much non-repeated information the matrix has.</div>
+      <div class="example"><b>Example:</b> if one row is just a multiple of another, it does not increase the rank.</div>
+    </article>
+    <article class="card gloss-item" data-keywords="eigenvalue eigenvector stable direction special stretching">
+      <div class="term"><h2>Eigenvector & Eigenvalue</h2><span class="tag">special directions</span></div>
+      <p class="meaning">An eigenvector is a direction that stays on the same line after transformation. The eigenvalue tells how much that direction is stretched, shrunk, or flipped.</p>
+      <div class="simple"><b>In simple words:</b> some directions are “special” because the machine only scales them.</div>
+      <div class="example"><b>Example:</b> PageRank uses an eigenvector to describe long-term importance of webpages.</div>
+    </article>
+    <article class="card gloss-item" data-keywords="inner product dot product similarity angle overlap">
+      <div class="term"><h2>Dot Product / Inner Product</h2><span class="tag">measure of alignment</span></div>
+      <p class="meaning">The dot product combines two vectors into a single number. It measures alignment, overlap, or similarity.</p>
+      <div class="simple"><b>In simple words:</b> the larger the overlap, the larger the dot product.</div>
+      <div class="example"><b>Example:</b> recommendation systems use dot products to score how well a title matches a user.</div>
+    </article>
+    <article class="card gloss-item" data-keywords="gradient slope steepest change optimization">
+      <div class="term"><h2>Gradient</h2><span class="tag">direction of steepest change</span></div>
+      <p class="meaning">The gradient points in the direction where a function increases the fastest.</p>
+      <div class="simple"><b>In simple words:</b> the gradient is the hill-climbing arrow of a function.</div>
+      <div class="example"><b>Example:</b> gradient descent moves in the opposite direction to reduce loss.</div>
+    </article>
+    <article class="card gloss-item" data-keywords="gradient descent optimization learning small steps update">
+      <div class="term"><h2>Gradient Descent</h2><span class="tag">learning by correction</span></div>
+      <p class="meaning">Gradient descent is an optimization method that repeatedly updates parameters in order to reduce error.</p>
+      <div class="simple"><b>In simple words:</b> take a small step downhill, measure again, and repeat.</div>
+      <div class="example"><b>Example:</b> <code>θ ← θ − η∇L</code> is the core rule used in machine learning.</div>
+    </article>
+    <article class="card gloss-item" data-keywords="projection shadow orthogonal nearest">
+      <div class="term"><h2>Projection</h2><span class="tag">best shadow</span></div>
+      <p class="meaning">A projection takes a point and places it onto a line or subspace in the nearest possible way.</p>
+      <div class="simple"><b>In simple words:</b> projection is the “shadow” of a point on a chosen direction or space.</div>
+      <div class="example"><b>Example:</b> least squares finds the projection of data onto a model space.</div>
+    </article>
+  </section>
+  <div class="footer-box">
+    <h3>How to use this page</h3>
+    <p>Open a lab, notice a word you do not fully understand, then return here. Read the simple explanation first, then the formal meaning, and finally the example.</p>
+    <div class="links"><a class="btn" href="index.html">⬡ Back to hub</a><a class="btn" href="image-matrix-lab.html">🖼️ Start with Lab 01</a><a class="btn" href="why-linear-algebra.html">🧭 Start Here page</a></div>
+  </div>
+</div>
+<script>
+const q = document.getElementById('glossSearch');
+const items = [...document.querySelectorAll('.gloss-item')];
+q.addEventListener('input', function(){
+  const term = this.value.trim().toLowerCase();
+  items.forEach(card => {
+    const text = (card.innerText + ' ' + (card.dataset.keywords||'')).toLowerCase();
+    card.style.display = text.includes(term) ? '' : 'none';
+  });
+});
+</script>
+</body>
+</html>
