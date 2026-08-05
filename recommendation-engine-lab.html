@@ -149,6 +149,57 @@ table.mx td.dim{color:var(--faint)}
 /* ===== Educational companion sections ===== */
 .edu-pack{margin-top:18px;display:grid;gap:18px}.edu-panel{background:linear-gradient(180deg,rgba(13,20,34,.96),rgba(8,13,23,.95));border:1px solid var(--line);border-radius:18px;padding:20px}.edu-panel h2{font-size:clamp(22px,2.4vw,30px);margin-bottom:8px}.edu-panel p{color:var(--dim)}.edu-kicker{display:inline-flex;padding:7px 12px;border-radius:999px;border:1px solid var(--line2);background:rgba(255,255,255,.04);font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:var(--cyan);margin-bottom:10px}.edu-grid2,.edu-grid3{display:grid;gap:16px}.edu-grid2{grid-template-columns:1fr 1fr}.edu-grid3{grid-template-columns:repeat(3,1fr)}@media(max-width:920px){.edu-grid2,.edu-grid3{grid-template-columns:1fr}}.edu-mini{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:14px;padding:16px}.edu-mini h3{font-size:18px;margin-bottom:6px}.edu-mini ul{padding-left:18px;color:var(--dim)}.edu-mini li+li{margin-top:8px}.edu-call{padding:16px 18px;border-left:4px solid var(--amber);background:rgba(251,191,36,.08);border-radius:0 12px 12px 0;color:var(--txt)}.qa details{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:14px;padding:14px 16px}.qa details+details{margin-top:10px}.qa summary{cursor:pointer;font-weight:700;color:var(--txt)}.qa p{margin-top:10px;color:var(--dim)}.edu-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.edu-link{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);font-size:13px;font-weight:700;color:var(--txt);text-decoration:none}
 
+
+/* ================= GUIDED SCREEN FLOW ================= */
+.screen{display:none;animation:screenIn .5s ease}
+.screen.on{display:block}
+@keyframes screenIn{from{opacity:0;transform:translateY(18px) scale(.99)}to{opacity:1;transform:none}}
+.guide-nav{
+  position:sticky;bottom:14px;z-index:40;margin:24px auto 0;max-width:980px;
+  display:grid;grid-template-columns:150px 1fr 150px;align-items:center;gap:14px;
+  padding:12px 14px;border-radius:18px;border:1px solid var(--line2);
+  background:rgba(7,11,18,.88);backdrop-filter:blur(16px);box-shadow:0 18px 50px rgba(0,0,0,.38)
+}
+.guide-nav .btn{margin:0;text-align:center;width:100%}
+.guide-nav .btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
+.guide-mid{text-align:center;min-width:0}
+.guide-count{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--cyan);letter-spacing:1.4px;text-transform:uppercase}
+.guide-title{font-weight:800;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.progress-track{height:5px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--violet),var(--cyan));transition:width .4s ease}
+.journey .step{cursor:pointer;user-select:none}
+.journey .step.current{color:#06121a;background:linear-gradient(90deg,var(--pink),var(--violet),var(--cyan));box-shadow:var(--glow);border-color:transparent}
+.journey .step.completed{color:var(--green);border-color:rgba(52,211,153,.28);background:rgba(52,211,153,.06)}
+.journey .step.locked{opacity:.55}
+.opening-stage{min-height:600px;display:grid;place-items:center;position:relative;overflow:hidden}
+.opening-stage::before{
+  content:'';position:absolute;inset:0;background:
+  radial-gradient(circle at 20% 25%,rgba(244,114,182,.12),transparent 28%),
+  radial-gradient(circle at 80% 70%,rgba(34,211,238,.12),transparent 30%);
+  pointer-events:none
+}
+.opening-inner{position:relative;max-width:900px;text-align:center;padding:28px}
+.opening-kicker{display:inline-flex;padding:8px 14px;border-radius:999px;border:1px solid var(--line2);color:var(--pink);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;letter-spacing:1.6px;text-transform:uppercase;background:rgba(244,114,182,.07)}
+.opening-inner h2{font-size:clamp(34px,5vw,68px);line-height:1.02;margin:18px 0;background:linear-gradient(90deg,#fff,var(--pink),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.opening-inner .lead{font-size:clamp(17px,2vw,22px);color:var(--dim);max-width:760px;margin:0 auto}
+.question-box{margin:26px auto 0;max-width:800px;border:1px solid var(--line2);border-radius:20px;padding:22px;background:rgba(12,19,32,.82);font-size:clamp(18px,2.3vw,26px);font-weight:700}
+.visual-pipeline{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;margin:28px 0}
+.visual-node{min-width:130px;padding:15px;border-radius:16px;border:1px solid var(--line);background:var(--panel2);font-weight:800}
+.visual-arrow{font-size:22px;color:var(--cyan)}
+.reveal-gate{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;margin:20px 0}
+.reveal-gate::before,.reveal-gate::after{content:'';height:1px;background:linear-gradient(90deg,transparent,var(--line2),transparent)}
+.reveal-gate span{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--violet);font-size:12px;letter-spacing:1.6px;text-transform:uppercase}
+.step-hero{margin-bottom:18px;padding:18px 20px;border-radius:18px;border:1px solid var(--line);background:linear-gradient(90deg,rgba(244,114,182,.08),rgba(34,211,238,.06))}
+.step-hero .num{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--cyan);font-size:12px;letter-spacing:1.4px;text-transform:uppercase}
+.step-hero h2{font-size:clamp(25px,3.5vw,40px);margin:5px 0}
+.step-hero p{color:var(--dim);max-width:800px}
+.micro-task{margin-top:14px;padding:14px 16px;border-left:4px solid var(--amber);background:rgba(251,191,36,.07);border-radius:0 12px 12px 0}
+@media(max-width:720px){
+  .guide-nav{grid-template-columns:1fr 1fr}.guide-mid{grid-column:1/-1;grid-row:1}.guide-nav #prevStep{grid-column:1}.guide-nav #nextStep{grid-column:2}
+  .journey{border-radius:18px}.journey .step{font-size:11px;padding:7px 9px}
+  .opening-stage{min-height:auto}.opening-inner{padding:12px}
+}
+
 </style>
 </head>
 <body>
@@ -161,138 +212,193 @@ table.mx td.dim{color:var(--faint)}
   </div>
   <h1>RECOMMENDATION ENGINE LAB</h1>
   <p class="sub">How does a platform guess your next favorite <b>movie or show</b>? Build a simple recommender using <b>vectors, matrices, dot products, cosine similarity, and ranking</b>.</p>
-  <div class="journey">
-    <div class="step on">1. USER DATA <span class="arr">→</span></div>
-    <div class="step on">2. TASTE VECTOR <span class="arr">→</span></div>
-    <div class="step on">3. FEATURE MATRIX <span class="arr">→</span></div>
-    <div class="step on">4. SCORE EACH TITLE <span class="arr">→</span></div>
-    <div class="step on">5. RANK <span class="arr">→</span></div>
-    <div class="step on">6. RECOMMEND</div>
+  <div class="journey" id="journey">
+    <div class="step current" data-screen="0">OPENING <span class="arr">→</span></div>
+    <div class="step locked" data-screen="1">1. USER DATA <span class="arr">→</span></div>
+    <div class="step locked" data-screen="2">2. TASTE VECTOR <span class="arr">→</span></div>
+    <div class="step locked" data-screen="3">3. FEATURE MATRIX <span class="arr">→</span></div>
+    <div class="step locked" data-screen="4">4. SCORE <span class="arr">→</span></div>
+    <div class="step locked" data-screen="5">5. RANK <span class="arr">→</span></div>
+    <div class="step locked" data-screen="6">6. RECOMMEND <span class="arr">→</span></div>
+    <div class="step locked" data-screen="7">7. REFLECT</div>
   </div>
 </header>
 
 <main>
-  <section class="panel fade" style="margin-bottom:18px">
-    <h2>Big idea</h2>
-    <p class="big">Treat each title as a <b>feature vector</b>, treat your taste as a <b>user vector</b>, and then measure how well they match.</p>
-    <div class="eq-wrap"><div class="eq"><span class="hl">title score</span> = x<sub>i</sub> · u &nbsp;&nbsp; and &nbsp;&nbsp; <span class="hl2">similarity</span> = (x<sub>i</sub> · u)/(‖x<sub>i</sub>‖‖u‖)</div></div>
-    <div class="callout cyan"><b>Interpretation:</b> dot product rewards overlap in the same genres. Cosine similarity asks: “Do the title and the user point in the same taste direction?”</div>
-  </section>
-
-  <section class="grid2" style="margin-bottom:18px">
-    <div class="panel fade">
-      <h2>Step 1 — Build your taste vector</h2>
-      <p>Move the sliders. This is the data the engine takes from you. Higher values mean stronger preference.</p>
-      <div id="sliders"></div>
-      <div class="chips">
-        <button class="chip" data-preset="balanced">Balanced</button>
-        <button class="chip" data-preset="adrenaline">Action + Sci-Fi</button>
-        <button class="chip" data-preset="cozy">Comedy + Romance</button>
-        <button class="chip" data-preset="detective">Mystery + Drama</button>
-      </div>
-      <div class="callout green"><b>Your taste vector:</b> <span id="userVec" class="mono"></span></div>
-      <div class="stats">
-        <div class="stat"><div class="v" id="userNorm">0.00</div><div class="k">‖u‖</div></div>
-        <div class="stat"><div class="v" id="favDim">Action</div><div class="k">Strongest genre</div></div>
-        <div class="stat"><div class="v" id="totalPref">0</div><div class="k">Total preference</div></div>
+  <!-- SCREEN 0: OPENING -->
+  <section class="screen on" id="screen-0" data-title="The mystery of recommendation">
+    <div class="panel opening-stage">
+      <div class="opening-inner">
+        <div class="opening-kicker">Mission 04 · Recommendation Engine</div>
+        <h2>Can mathematics predict what you will watch next?</h2>
+        <p class="lead">Two people see the same catalogue, yet receive completely different recommendations. Your task is to build the mathematical machine that makes this possible.</p>
+        <div class="question-box">How can a human preference such as “I love mystery but dislike romance” be converted into numbers that a machine can compare?</div>
+        <div class="visual-pipeline" aria-label="Recommendation pipeline">
+          <div class="visual-node">👤 Your taste</div><div class="visual-arrow">→</div>
+          <div class="visual-node">🔢 A vector</div><div class="visual-arrow">→</div>
+          <div class="visual-node">🎬 Title vectors</div><div class="visual-arrow">→</div>
+          <div class="visual-node">🏆 Ranking</div>
+        </div>
+        <button class="btn primary big" type="button" id="startJourney">BEGIN THE EXPERIMENT →</button>
+        <div class="reveal-gate"><span>No formula before the question</span></div>
+        <p style="color:var(--faint)">You will uncover vectors, matrices, dot products, and cosine similarity one step at a time.</p>
       </div>
     </div>
+  </section>
 
-    <div class="panel fade">
-      <h2>Step 2 — See the content space</h2>
-      <p>Each row is a title, and each column is a genre score from 0 to 5. This is the <b>feature matrix</b> <span class="mono">X</span>.</p>
-      <div class="orbit-wrap">
-        <div class="orbit">
-          <div class="ring r1"></div>
-          <div class="ring r2"></div>
-          <div class="node center">USER<br/>VECTOR<small>u</small></div>
-          <div class="node" style="left:12%; top:23%">🚀<small>Sci‑Fi</small></div>
-          <div class="node" style="right:10%; top:24%">😂<small>Comedy</small></div>
-          <div class="node" style="left:18%; bottom:14%">🕵️<small>Mystery</small></div>
-          <div class="node" style="right:18%; bottom:12%">❤️<small>Romance</small></div>
-          <div class="node" style="left:44%; top:8%">💥<small>Action</small></div>
-          <div class="node" style="left:46%; bottom:5%">🎭<small>Drama</small></div>
+  <!-- SCREEN 1: USER DATA -->
+  <section class="screen" id="screen-1" data-title="Turn taste into data">
+    <div class="step-hero"><div class="num">Step 1 of 7</div><h2>Turn your taste into data</h2><p>A machine cannot directly understand “I love thrillers.” It needs measurable features. Rate each genre from 0 to 5.</p><div class="micro-task"><b>Before moving the sliders:</b> predict which genre will become the largest coordinate in your taste profile.</div></div>
+    <div class="grid2">
+      <div class="panel">
+        <h2>Build your preference profile</h2>
+        <p>Move the sliders. Higher values mean stronger preference.</p>
+        <div id="sliders"></div>
+        <div class="chips">
+          <button class="chip" data-preset="balanced">Balanced</button>
+          <button class="chip" data-preset="adrenaline">Action + Sci-Fi</button>
+          <button class="chip" data-preset="cozy">Comedy + Romance</button>
+          <button class="chip" data-preset="detective">Mystery + Drama</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>What has the machine collected?</h2>
+        <div class="stats">
+          <div class="stat"><div class="v" id="favDim">Action</div><div class="k">Strongest genre</div></div>
+          <div class="stat"><div class="v" id="totalPref">0</div><div class="k">Total preference</div></div>
+        </div>
+        <div class="callout cyan"><b>Important:</b> these six ratings are no longer separate answers. Together, they form one mathematical object.</div>
+        <div class="orbit-wrap" style="min-height:330px">
+          <div class="orbit">
+            <div class="ring r1"></div><div class="ring r2"></div>
+            <div class="node center">YOUR<br/>TASTE<small>6 numbers</small></div>
+            <div class="node" style="left:10%;top:22%">💥<small>Action</small></div>
+            <div class="node" style="right:10%;top:22%">🚀<small>Sci-Fi</small></div>
+            <div class="node" style="left:12%;bottom:12%">🕵️<small>Mystery</small></div>
+            <div class="node" style="right:12%;bottom:12%">😂<small>Comedy</small></div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="panel fade" style="margin-bottom:18px">
-    <h2>Step 3 — The feature matrix X</h2>
-    <p>The recommendation engine stores content as numbers. Here columns are <b>Action, Sci‑Fi, Mystery, Comedy, Drama, Romance</b>.</p>
-    <div class="mtx-wrap" id="matrixWrap"></div>
-    <div class="legend"><span><i></i> highlighted cells show the selected title in the worked example below</span></div>
-  </section>
-
-  <section class="grid2" style="margin-bottom:18px">
-    <div class="panel fade">
-      <h2>Step 4 — Work through one title</h2>
-      <p>Select any title. We will compute its raw affinity and cosine similarity step by step.</p>
-      <label style="display:block; font-size:13px; color:var(--dim); margin:8px 0 6px">Choose a title</label>
-      <select id="titleSelect"></select>
-      <div class="callout"><b>Selected row vector x<sub>i</sub>:</b> <span id="itemVec" class="mono"></span></div>
-      <div class="eq-wrap"><div class="eq" id="dotEq"></div></div>
-      <div class="eq-wrap"><div class="eq" id="cosEq"></div></div>
-      <div class="stats">
-        <div class="stat"><div class="v" id="rawScore">0.0</div><div class="k">Dot product</div></div>
-        <div class="stat"><div class="v" id="cosScore">0%</div><div class="k">Cosine similarity</div></div>
-        <div class="stat"><div class="v" id="finalScore">0</div><div class="k">Final score</div></div>
+  <!-- SCREEN 2: VECTOR -->
+  <section class="screen" id="screen-2" data-title="Discover the taste vector">
+    <div class="step-hero"><div class="num">Step 2 of 7</div><h2>Your answers have become a vector</h2><p>The order matters: Action, Sci-Fi, Mystery, Comedy, Drama, Romance. One person is now represented by one point in a six-dimensional taste space.</p></div>
+    <div class="grid2">
+      <div class="panel">
+        <h2>Your taste vector u</h2>
+        <div class="eq-wrap"><div class="eq"><span class="hl">u</span> = <span id="userVec" class="mono"></span></div></div>
+        <div class="stats">
+          <div class="stat"><div class="v" id="userNorm">0.00</div><div class="k">Length ‖u‖</div></div>
+          <div class="stat"><div class="v">6</div><div class="k">Dimensions</div></div>
+        </div>
+        <div class="callout green"><b>Meaning:</b> each coordinate records one preference. The vector packages all six preferences into a single object that can be compared with other vectors.</div>
       </div>
-      <div class="callout cyan" id="whyMatch">This title matches because ...</div>
+      <div class="panel">
+        <h2>Why does order matter?</h2>
+        <p class="big">The vectors [5, 0, 0, 0, 0, 0] and [0, 0, 0, 0, 0, 5] contain the same numbers, but represent completely different viewers.</p>
+        <div class="visual-pipeline">
+          <div class="visual-node">[5,0,0,0,0,0]<small style="display:block;color:var(--dim)">Action lover</small></div>
+          <div class="visual-arrow">≠</div>
+          <div class="visual-node">[0,0,0,0,0,5]<small style="display:block;color:var(--dim)">Romance lover</small></div>
+        </div>
+        <div class="micro-task">Explain in one sentence why a vector is more useful than writing six separate descriptions.</div>
+      </div>
     </div>
+  </section>
 
-    <div class="panel fade">
-      <h2>Step 5 — Rank everything</h2>
-      <p>For every row of <span class="mono">X</span>, compute a score. Then sort from highest to lowest.</p>
-      <div class="eq-wrap"><div class="eq">X ∈ ℝ<sup>8×6</sup>, &nbsp; u ∈ ℝ<sup>6</sup>, &nbsp; <span class="hl">a = X u</span></div></div>
+  <!-- SCREEN 3: FEATURE MATRIX -->
+  <section class="screen" id="screen-3" data-title="Build the feature matrix">
+    <div class="step-hero"><div class="num">Step 3 of 7</div><h2>Movies and shows also become vectors</h2><p>Every title receives the same six genre coordinates. Stacking all title vectors creates the feature matrix X.</p><div class="micro-task"><b>Prediction:</b> inspect the rows and guess which title will best match your vector before any score is calculated.</div></div>
+    <div class="panel">
+      <h2>The feature matrix X</h2>
+      <p>Rows are titles. Columns are Action, Sci-Fi, Mystery, Comedy, Drama, and Romance.</p>
+      <div class="mtx-wrap" id="matrixWrap"></div>
+      <div class="legend"><span><i></i> highlighted cells show the title selected for the next worked example</span></div>
+      <label style="display:block;font-size:13px;color:var(--dim);margin:14px 0 6px">Choose a title to investigate next</label>
+      <select id="titleSelect"></select>
+      <div class="callout cyan"><b>Matrix meaning:</b> X stores the complete catalogue in a form that one mathematical operation can process.</div>
+    </div>
+  </section>
+
+  <!-- SCREEN 4: SCORE ONE TITLE -->
+  <section class="screen" id="screen-4" data-title="Score one title">
+    <div class="step-hero"><div class="num">Step 4 of 7</div><h2>Measure the match with a dot product</h2><p>Multiply matching coordinates and add them. Strong overlap in genres produces a larger score.</p></div>
+    <div class="grid2">
+      <div class="panel">
+        <h2>Worked calculation</h2>
+        <div class="callout"><b>Selected title vector x<sub>i</sub>:</b> <span id="itemVec" class="mono"></span></div>
+        <div class="eq-wrap"><div class="eq" id="dotEq"></div></div>
+        <div class="stats"><div class="stat"><div class="v" id="rawScore">0.0</div><div class="k">Raw affinity</div></div></div>
+        <div class="callout green"><b>Interpretation:</b> a genre contributes strongly only when both the user and the title have a high value in that same coordinate.</div>
+      </div>
+      <div class="panel">
+        <h2>Why raw score is not enough</h2>
+        <p>A title with large feature values can receive a high dot product simply because its vector is long. We also need to compare direction.</p>
+        <div class="eq-wrap"><div class="eq" id="cosEq"></div></div>
+        <div class="stats">
+          <div class="stat"><div class="v" id="cosScore">0%</div><div class="k">Cosine similarity</div></div>
+          <div class="stat"><div class="v" id="finalScore">0</div><div class="k">Combined score</div></div>
+        </div>
+        <div class="callout cyan" id="whyMatch">This title matches because ...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 5: RANK -->
+  <section class="screen" id="screen-5" data-title="Rank the catalogue">
+    <div class="step-hero"><div class="num">Step 5 of 7</div><h2>Apply the same calculation to every row</h2><p>Matrix–vector multiplication computes all title affinities at once. The catalogue becomes a ranked list.</p></div>
+    <div class="panel">
+      <div class="eq-wrap"><div class="eq">X ∈ ℝ<sup>8×6</sup>, &nbsp; u ∈ ℝ<sup>6</sup>, &nbsp; <span class="hl">a = Xu</span></div></div>
       <div class="barbox" id="rankBars"></div>
-      <div class="callout green"><b>Scoring rule:</b> final = 60% normalized dot product + 40% cosine similarity. This keeps both <i>strength</i> and <i>direction</i> in the decision.</div>
+      <div class="callout green"><b>Scoring rule used here:</b> final = 60% normalized dot product + 40% cosine similarity. It combines strength of overlap with direction of taste.</div>
+      <div class="micro-task">Before moving forward, identify the title that surprised you most. Which coordinates caused its rank?</div>
     </div>
   </section>
 
-  <section class="panel fade" style="margin-bottom:18px">
-    <h2>Step 6 — Your recommendations</h2>
-    <p>The top titles become the final recommendations. You can present these as “Because you like sci‑fi and mystery...” or “Because your taste vector aligns strongly with these content vectors.”</p>
-    <div class="grid3" id="recGrid"></div>
-  </section>
-
-  <section class="panel fade">
-    <h2>What mathematics did we just use?</h2>
-    <div class="grid4">
-      <div class="item-card"><div class="tag">Matrix</div><div class="title">Feature Matrix</div><div class="why">Rows = titles, columns = genres. A recommendation platform needs structured data.</div></div>
-      <div class="item-card"><div class="tag">Vector</div><div class="title">Taste Vector</div><div class="why">Your slider values form a vector u. This converts human taste into numbers.</div></div>
-      <div class="item-card"><div class="tag">Dot Product</div><div class="title">Affinity</div><div class="why">Large overlap between a title vector and your preference vector means a better match.</div></div>
-      <div class="item-card"><div class="tag">Similarity</div><div class="title">Cosine Similarity</div><div class="why">The angle between vectors measures whether the <i>pattern</i> of taste aligns, even when magnitudes differ.</div></div>
+  <!-- SCREEN 6: RECOMMEND -->
+  <section class="screen" id="screen-6" data-title="Reveal your recommendations">
+    <div class="step-hero"><div class="num">Step 6 of 7</div><h2>The top scores become recommendations</h2><p>The engine does not “understand” movies as a human does. It compares structured numerical descriptions and turns the result into an explanation.</p></div>
+    <div class="panel">
+      <h2>Your top three</h2>
+      <div class="grid3" id="recGrid"></div>
+      <div class="callout cyan"><b>Explainability:</b> “Because you like mystery and sci-fi” is generated from the coordinates that contributed most strongly to the score.</div>
     </div>
-    <div class="footer-cta">
-      <a class="btn primary" href="index.html">⬡ Back to MathCode Studio</a>
-      <a class="btn" href="applications.html">🌌 Applications</a>
-      <a class="btn" href="careers.html">🚀 Careers</a>
+    <div class="grid4" style="margin-top:18px">
+      <div class="item-card"><div class="tag">Matrix</div><div class="title">Feature Matrix</div><div class="why">Rows = titles, columns = features.</div></div>
+      <div class="item-card"><div class="tag">Vector</div><div class="title">Taste Vector</div><div class="why">Your ratings become one point in taste space.</div></div>
+      <div class="item-card"><div class="tag">Dot Product</div><div class="title">Affinity</div><div class="why">Measures weighted overlap.</div></div>
+      <div class="item-card"><div class="tag">Cosine</div><div class="title">Direction</div><div class="why">Measures pattern alignment.</div></div>
     </div>
   </section>
 
-  <section class="edu-pack">
-    <div class="edu-panel">
-      <div class="edu-kicker">Before you learn, try this</div>
-      <h2>Recommendation Engine Lab — Curiosity Prompt</h2>
-      <div class="edu-call">If one viewer loves sci-fi and mystery while another prefers comedy and romance, how can the same database produce two completely different top recommendations?</div>
-      <div class="edu-links"><a class="edu-link" href="why-linear-algebra.html">🧭 Why are we learning this?</a><a class="edu-link" href="glossary.html">📘 Open the glossary</a></div>
-    </div>
-    <div class="edu-grid2">
-      <div class="edu-panel edu-mini"><h3>What you just discovered</h3><ul><li>A user’s taste can be represented as a vector.</li><li>Each title can also be represented as a feature vector.</li><li>Dot product and cosine similarity help score how strongly a title aligns with a user’s preferences.</li></ul></div>
-      <div class="edu-panel edu-mini"><h3>Why this matters</h3><ul><li>Netflix, YouTube, Spotify and e-commerce</li><li>Personalized feeds and suggestions</li><li>Recommender systems in AI products</li></ul></div>
-    </div>
-    <div class="edu-grid2">
-      <div class="edu-panel"><div class="edu-kicker">Quick check</div><h2>Test your understanding</h2><div class="qa"><details><summary>What does the feature matrix store?</summary><p>Rows for titles and columns for genre or content features.</p></details><details><summary>Why use cosine similarity?</summary><p>It measures how well the pattern of preferences aligns, not just the total magnitude.</p></details><details><summary>True or false: the highest raw dot product always gives the fairest recommendation.</summary><p>False — similarity in direction also matters, especially when magnitudes differ.</p></details></div></div>
-      <div class="edu-panel edu-mini"><h3>Common mistakes students make</h3><ul><li>Thinking recommendation is random or purely opinion-based.</li><li>Ignoring that two users with different magnitudes can still have similar taste directions.</li><li>Forgetting that a score is built from several mathematical signals, not one number alone.</li></ul></div>
-    </div>
-    <div class="edu-grid2">
-      <div class="edu-panel edu-mini"><h3>Reflection prompt</h3><ul><li>Which genre dimensions dominate your own taste vector?</li><li>When would cosine similarity be more useful than a raw dot product?</li><li>How does representing people and titles as vectors make recommendation possible?</li></ul></div>
-      <div class="edu-panel edu-mini"><h3>Challenge mode</h3><p>Invent a new user profile and predict the top 3 titles before clicking any preset or slider.</p><div class="edu-links"><a class="edu-link" href="index.html">⬡ Back to hub</a><a class="edu-link" href="glossary.html">📘 Review key words</a></div></div>
-    </div>
+  <!-- SCREEN 7: CONSOLIDATE -->
+  <section class="screen" id="screen-7" data-title="Consolidate the mathematics">
+    <div class="step-hero"><div class="num">Step 7 of 7</div><h2>What you just discovered</h2><p>A real recommendation engine is more complex, but its core logic begins with the same linear-algebra language you used here.</p></div>
+    <section class="edu-pack" style="margin-top:0">
+      <div class="edu-grid2">
+        <div class="edu-panel edu-mini"><h3>What you discovered</h3><ul><li>A user’s taste can be represented as a vector.</li><li>Each title can be represented as a feature vector.</li><li>Stacking title vectors creates a matrix.</li><li>Dot product and cosine similarity measure different aspects of a match.</li></ul></div>
+        <div class="edu-panel edu-mini"><h3>Why this matters</h3><ul><li>Netflix, YouTube, Spotify, and shopping platforms</li><li>Personalised feeds and search results</li><li>Recommender systems in AI products</li></ul></div>
+      </div>
+      <div class="edu-grid2">
+        <div class="edu-panel"><div class="edu-kicker">Quick check</div><h2>Test your understanding</h2><div class="qa"><details><summary>What does the feature matrix store?</summary><p>Rows represent titles and columns represent content features.</p></details><details><summary>Why use cosine similarity?</summary><p>It measures whether the pattern of preferences points in the same direction, independent of overall magnitude.</p></details><details><summary>Is the largest raw dot product always the fairest recommendation?</summary><p>No. Large vector magnitudes can inflate the raw score, so direction-based similarity is also useful.</p></details></div></div>
+        <div class="edu-panel edu-mini"><h3>Common mistakes</h3><ul><li>Thinking recommendations are random.</li><li>Confusing a user vector with a single rating.</li><li>Assuming dot product and cosine similarity measure exactly the same thing.</li><li>Forgetting that feature design affects the recommendations.</li></ul></div>
+      </div>
+      <div class="edu-grid2">
+        <div class="edu-panel edu-mini"><h3>Reflection</h3><ul><li>Which coordinates dominated your recommendations?</li><li>How would the result change if the system added “language” or “release year” as new dimensions?</li><li>What bias could enter through the choice of features?</li></ul></div>
+        <div class="edu-panel edu-mini"><h3>Challenge mode</h3><p>Create a user vector, predict the top three titles before calculating, and explain your prediction coordinate by coordinate.</p><div class="edu-links"><a class="edu-link" href="index.html">⬡ Back to hub</a><a class="edu-link" href="glossary.html">📘 Review key words</a><a class="edu-link" href="applications.html">🌌 Explore applications</a></div></div>
+      </div>
+    </section>
   </section>
 
+  <div class="guide-nav" aria-label="Lab navigation">
+    <button class="btn" id="prevStep" type="button">← PREVIOUS</button>
+    <div class="guide-mid"><div class="guide-count" id="guideCount">Introduction · 1 of 8</div><div class="guide-title" id="guideTitle">The mystery of recommendation</div><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div>
+    <button class="btn primary" id="nextStep" type="button">NEXT →</button>
+  </div>
 </main>
+<footer style="position:relative;z-index:2;text-align:center;padding:26px 18px 40px;color:var(--dim);border-top:1px solid var(--line)"><b style="color:var(--txt)">Anupam | MathSphere</b> · Recommendation Engine Lab · MathCode Studio</footer>
 
 <script>
 const GENRES = [
@@ -401,6 +507,60 @@ function reasonFor(r){
 }
 function updateAll(){ renderUser(); renderMatrix(); renderSelected(); renderRanks(); }
 updateAll();
+
+
+// ================= GUIDED SCREEN NAVIGATION =================
+const SCREEN_TITLES = [
+  'The mystery of recommendation','Turn taste into data','Discover the taste vector',
+  'Build the feature matrix','Score one title','Rank the catalogue',
+  'Reveal your recommendations','Consolidate the mathematics'
+];
+let currentScreen = 0;
+let highestUnlocked = 0;
+const screens = [...document.querySelectorAll('.screen')];
+const journeySteps = [...document.querySelectorAll('#journey .step')];
+const prevStep = document.getElementById('prevStep');
+const nextStep = document.getElementById('nextStep');
+const guideCount = document.getElementById('guideCount');
+const guideTitle = document.getElementById('guideTitle');
+const progressFill = document.getElementById('progressFill');
+
+function showScreen(index, scroll=true){
+  index = Math.max(0, Math.min(screens.length - 1, index));
+  currentScreen = index;
+  highestUnlocked = Math.max(highestUnlocked, index);
+  screens.forEach((screen,i)=>screen.classList.toggle('on', i===index));
+  journeySteps.forEach((step,i)=>{
+    step.classList.toggle('current', i===index);
+    step.classList.toggle('completed', i<index);
+    step.classList.toggle('locked', i>highestUnlocked);
+  });
+  prevStep.disabled = index===0;
+  nextStep.textContent = index===screens.length-1 ? 'RESTART LAB ↻' : 'NEXT →';
+  guideCount.textContent = (index===0 ? 'Introduction' : `Step ${index} of 7`) + ` · ${index+1} of ${screens.length}`;
+  guideTitle.textContent = SCREEN_TITLES[index];
+  progressFill.style.width = `${(index/(screens.length-1))*100}%`;
+  if(index>=3) renderMatrix();
+  if(index>=4) renderSelected();
+  if(index>=5) renderRanks();
+  if(scroll) window.scrollTo({top:0,behavior:'smooth'});
+}
+prevStep.addEventListener('click',()=>showScreen(currentScreen-1));
+nextStep.addEventListener('click',()=>{
+  if(currentScreen===screens.length-1){highestUnlocked=0;showScreen(0);return;}
+  showScreen(currentScreen+1);
+});
+document.getElementById('startJourney').addEventListener('click',()=>showScreen(1));
+journeySteps.forEach(step=>step.addEventListener('click',()=>{
+  const target = Number(step.dataset.screen);
+  if(target<=highestUnlocked) showScreen(target);
+}));
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight' && currentScreen<screens.length-1) showScreen(currentScreen+1);
+  if(e.key==='ArrowLeft' && currentScreen>0) showScreen(currentScreen-1);
+});
+showScreen(0,false);
+
 </script>
 </body>
 </html>

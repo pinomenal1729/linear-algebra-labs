@@ -16,3 +16,8 @@ Static website for GitHub Pages.
 - `recommendation-engine-lab.html` — Lab 04
 
 All files should stay in the repository root for GitHub Pages.
+
+## Latest changes
+- Lab 04 is now a one-screen-at-a-time guided experience.
+- Removed the homepage top lab-count banner.
+- Footer branding updated to Anupam | MathSphere.
