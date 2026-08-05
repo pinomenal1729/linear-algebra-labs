@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>IMAGE → MATRIX LAB</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<style>
+:root{
+  --bg:#0b0f1a; --panel:#111827; --panel2:#0f1626; --border:#1f2b45;
+  --text:#e6ecf7; --dim:#8b98b8; --accent:#4f8cff; --accent2:#22d3ee;
+  --good:#34d399; --warn:#fbbf24; --bad:#f87171; --purple:#a78bfa;
+  --mono:"SFMono-Regular",ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+  background-image:
+    radial-gradient(circle at 85% 10%, rgba(79,140,255,.08), transparent 40%),
+    radial-gradient(circle at 10% 90%, rgba(34,211,238,.06), transparent 40%),
+    linear-gradient(rgba(31,43,69,.25) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(31,43,69,.25) 1px, transparent 1px);
+  background-size:100% 100%,100% 100%,44px 44px,44px 44px;
+  min-height:100vh;
+}
+/* ============ CLASSROOM MODE ============ */
+body.classroom{ --base-scale:1.35 }
+body.classroom .card h2{ font-size:1.7rem }
+body.classroom .card h3{ font-size:1.45rem }
+body.classroom canvas{ max-width:100% }
+body.classroom .hide-in-classroom{ display:none !important }
+/* ============ HEADER ============ */
+header{ text-align:center; padding:2.4rem 1rem 1.2rem; position:relative }
+header h1{
+  font-size:2.6rem; letter-spacing:.02em;
+  background:linear-gradient(90deg,#fff,#9cc0ff 60%,#22d3ee);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+header .subtitle{ color:var(--dim); font-size:1.1rem; margin-top:.5rem }
+.topbar{ position:absolute; top:1rem; right:1rem; display:flex; gap:.6rem; flex-wrap:wrap }
+button{
+  background:var(--panel); color:var(--text); border:1px solid var(--border);
+  padding:.55rem 1rem; border-radius:.6rem; font-size:1rem; cursor:pointer;
+  transition:all .15s ease; font-weight:600;
+}
+button:hover{ border-color:var(--accent); color:#fff; transform:translateY(-1px) }
+button.active{ background:var(--accent); border-color:var(--accent); color:#fff }
+button.primary{ background:var(--accent); border-color:var(--accent); color:#fff; font-size:1.1rem; padding:.75rem 1.5rem }
+button.big{ font-size:1.25rem; padding:.9rem 2rem }
+button.ghost{ background:transparent }
+button:disabled{ opacity:.4; cursor:not-allowed; transform:none }
+button.small{ padding:.3rem .6rem; font-size:.9rem }
+/* ============ PIPELINE ============ */
+.pipeline{
+  display:flex; justify-content:center; align-items:center; gap:.35rem;
+  flex-wrap:wrap; margin:1.4rem auto .4rem; max-width:1100px; padding:0 1rem;
+}
+.pipe{
+  font-size:.85rem; padding:.42rem .7rem; border:1px solid var(--border);
+  border-radius:999px; background:var(--panel2); color:var(--dim);
+  transition:all .25s ease; white-space:nowrap;
+}
+.pipe.active{ background:var(--accent); border-color:var(--accent); color:#fff; box-shadow:0 0 14px rgba(79,140,255,.5) }
+.pipe.done{ background:rgba(52,211,153,.12); border-color:rgba(52,211,153,.5); color:var(--good) }
+.pipe-arrow{ color:var(--dim); font-size:.8rem }
+/* ============ LAYOUT ============ */
+main{ max-width:1280px; margin:0 auto; padding:1rem 1.4rem 4rem }
+.card{
+  background:var(--panel); border:1px solid var(--border); border-radius:1rem;
+  padding:1.6rem; margin:1.2rem 0;
+}
+.card h2{ font-size:1.5rem; margin-bottom:.5rem; color:#fff }
+.card h3{ font-size:1.2rem; margin:1rem 0 .5rem; color:#fff }
+.card .lead{ color:var(--dim); margin-bottom:1rem; line-height:1.5 }
+.grid2{ display:grid; grid-template-columns:1fr 1fr; gap:1.2rem }
+.grid3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.2rem }
+.hidden{ display:none !important }
+.center{ text-align:center }
+.eq{ margin:.6rem 0; font-size:1.05rem }
+.eq .katex{ font-size:1.15em }
+.badge{ display:inline-block; padding:.2rem .6rem; border-radius:999px; font-size:.8rem; border:1px solid var(--border); color:var(--dim) }
+.highlight{ color:var(--accent2); font-weight:700 }
+.good{ color:var(--good) } .warn{ color:var(--warn) } .bad{ color:var(--bad) }
+.notice{ background:rgba(251,191,36,.08); border:1px solid rgba(251,191,36,.4); border-radius:.7rem; padding:.9rem 1rem; margin:.8rem 0 }
+.boxed{ border:2px solid var(--accent); border-radius:.7rem; padding:.9rem 1.1rem; margin:.9rem 0; background:rgba(79,140,255,.06) }
+.info-note{ background:rgba(34,211,238,.07); border:1px solid rgba(34,211,238,.35); border-radius:.7rem; padding:.9rem 1rem; margin:.8rem 0 }
+/* ============ CONTROLS ============ */
+.ctrl{ margin:.6rem 0 }
+.ctrl label{ display:block; color:var(--dim); font-size:.9rem; margin-bottom:.3rem }
+input[type=range]{ width:100%; accent-color:var(--accent) }
+input[type=number], select{
+  background:var(--panel2); color:var(--text); border:1px solid var(--border);
+  border-radius:.5rem; padding:.45rem .6rem; font-size:1rem; width:100%;
+}
+input[type=file]{ color:var(--dim); font-size:.95rem }
+.switch-row{ display:flex; gap:.5rem; flex-wrap:wrap; margin:.7rem 0 }
+.switch-row button.small{ min-width:5.2rem }
+/* ============ CANVAS AREAS ============ */
+.canvas-frame{
+  border:1px solid var(--border); border-radius:.7rem; overflow:hidden;
+  background:#06070c; display:flex; justify-content:center; align-items:center;
+  position:relative;
+}
+canvas{ display:block; image-rendering:auto }
+.pixel-hud{ font-family:var(--mono); font-size:1.02rem; color:var(--accent2); margin-top:.5rem }
+.stat{ font-family:var(--mono); font-size:1.15rem; color:#fff; margin:.35rem 0 }
+.stat .k{ color:var(--dim); font-size:.9rem }
+/* matrix table */
+.mtx-table{ border-collapse:collapse; margin:.6rem auto; font-family:var(--mono); font-size:.82rem }
+.mtx-table td{
+  width:2.3rem; height:2.3rem; text-align:center; border:1px solid var(--border);
+  transition:all .12s ease; cursor:pointer; color:var(--text);
+}
+.mtx-table td:hover, .mtx-table td.hot{ outline:2px solid var(--accent2); transform:scale(1.12); z-index:2; position:relative }
+/* upload */
+.upload-zone{
+  border:2px dashed var(--border); border-radius:1rem; padding:2.6rem 1rem;
+  text-align:center; cursor:pointer; transition:all .2s ease; background:var(--panel2);
+}
+.upload-zone:hover, .upload-zone.drag{ border-color:var(--accent); background:rgba(79,140,255,.06) }
+.samples{ display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:1.2rem }
+.sample-thumb{ border:1px solid var(--border); border-radius:.7rem; padding:.5rem; cursor:pointer; background:var(--panel2); text-align:center; transition:all .15s ease }
+.sample-thumb:hover{ border-color:var(--accent); transform:translateY(-3px) }
+.sample-thumb canvas{ border-radius:.4rem }
+.sample-thumb .t{ font-size:.85rem; color:var(--dim); margin-top:.3rem }
+/* pipeline view */
+.pipe-step{
+  display:flex; align-items:center; gap:1rem; margin:.45rem auto; max-width:520px;
+  border:1px solid var(--border); border-radius:.8rem; padding:.7rem 1rem;
+  background:var(--panel2); opacity:.25; transition:all .4s ease;
+}
+.pipe-step.on{ opacity:1; border-color:var(--accent); box-shadow:0 0 16px rgba(79,140,255,.25) }
+.pipe-step .n{ width:2.2rem; height:2.2rem; border-radius:50%; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0 }
+.pipe-step .t{ font-weight:600 }
+.pipe-step .d{ color:var(--dim); font-size:.9rem }
+/* concept map */
+.cmap{ display:flex; flex-direction:column; align-items:center; gap:.1rem }
+.cmap .node{
+  border:1px solid var(--border); border-radius:.8rem; padding:.6rem 1.4rem;
+  background:var(--panel2); font-size:1.05rem; font-weight:600; min-width:230px; text-align:center;
+}
+.cmap .arrow{ color:var(--accent); font-size:1.2rem }
+/* guided demo overlay */
+.guide{
+  position:fixed; inset:0; background:rgba(4,8,16,.88); backdrop-filter:blur(4px);
+  display:none; align-items:center; justify-content:center; z-index:100;
+}
+.guide.show{ display:flex }
+.guide .box{ max-width:720px; width:92%; background:var(--panel); border:1px solid var(--accent); border-radius:1.1rem; padding:2rem; text-align:center }
+.guide .step-title{ font-size:1.5rem; margin-bottom:.6rem; color:#fff }
+.guide .step-count{ color:var(--dim); margin-bottom:.4rem }
+.guide .reveal-text{ color:var(--accent2); font-size:1.1rem; margin:.8rem 0; min-height:1.6rem }
+.guide .nav{ display:flex; gap:.8rem; justify-content:center; margin-top:1.2rem; flex-wrap:wrap }
+/* misc */
+.progressbar{ height:4px; background:var(--border); border-radius:999px; overflow:hidden; margin:.6rem 0 }
+.progressbar i{ display:block; height:100%; background:var(--accent); width:0%; transition:width .3s ease }
+.swatch{ width:2.6rem; height:2.6rem; border-radius:.5rem; border:1px solid var(--border); display:inline-block; vertical-align:middle }
+.eq-slot{ min-height:2.6rem }
+footer{ text-align:center; color:var(--dim); padding:2rem 1rem 3rem; font-size:.9rem }
+@media (max-width:900px){ .grid3,.grid2{ grid-template-columns:1fr } header h1{ font-size:1.9rem } }
+</style>
+</head>
+<body>
+<header>
+  <div class="topbar">
+    <button id="btnClassroom" onclick="toggleClassroom()">CLASSROOM MODE</button>
+    <button id="btnGuided" onclick="startGuidedDemo()" class="ghost">GUIDED DEMO</button>
+  </div>
+  <h1>IMAGE → MATRIX LAB</h1>
+  <p class="subtitle">How does a computer transform an image using mathematics?</p>
+  <div class="pipeline" id="pipeline"></div>
+</header>
+<main>
+  <!-- ================= HOME ================= -->
+  <section id="screen-home" class="screen">
+    <div class="card">
+      <h2 class="center">Upload an Image</h2>
+      <p class="lead center">PNG · JPG · JPEG — or pick a built-in sample below.</p>
+      <div class="upload-zone" id="uploadZone">
+        <div style="font-size:2.6rem">⬆</div>
+        <p style="font-size:1.15rem">Click here or drag &amp; drop an image</p>
+        <p class="hide-in-classroom" style="color:var(--dim);margin-top:.4rem">All processing happens locally in your browser — nothing is uploaded.</p>
+      </div>
+      <input type="file" id="fileInput" accept="image/png,image/jpeg,image/jpg" class="hidden" />
+      <div class="samples" id="samples"></div>
+    </div>
+    <div id="homeInfo" class="card hidden">
+      <h2 class="center">Image Loaded</h2>
+      <div class="center">
+        <div class="canvas-frame" style="max-width:520px;margin:0 auto"><canvas id="homeCanvas"></canvas></div>
+      </div>
+      <div class="grid3" style="margin-top:1rem">
+        <div class="card" style="margin:0"><div class="stat"><span class="k">Width</span><br/><span id="statW">—</span> px</div></div>
+        <div class="card" style="margin:0"><div class="stat"><span class="k">Height</span><br/><span id="statH">—</span> px</div></div>
+        <div class="card" style="margin:0"><div class="stat"><span class="k">Channels</span><br/><span id="statC">—</span></div></div>
+      </div>
+      <div class="center" style="margin-top:1rem">
+        <div class="eq" id="eqPixels"></div>
+        <div class="eq" id="eqShape"></div>
+      </div>
+      <div class="center" style="margin-top:1.4rem">
+        <button class="primary big" onclick="goScreen('pixels')">START EXPLORING THE MATHEMATICS →</button>
+      </div>
+    </div>
+  </section>
+  <!-- ================= STAGE 1: PIXELS ================= -->
+  <section id="screen-pixels" class="screen hidden">
+    <div class="card">
+      <h2>Stage 1 — The Image is a Grid of Numbers</h2>
+      <p class="lead">Move the mouse over the image to magnify pixels. <b>Click a pixel</b> to read its coordinate and its RGB vector.</p>
+      <div class="grid2">
+        <div>
+          <div class="switch-row">
+            <button id="modeRGB" class="small active" onclick="setGray(false)">RGB</button>
+            <button id="modeGRAY" class="small" onclick="setGray(true)">GRAYSCALE</button>
+          </div>
+          <div class="canvas-frame" style="max-width:560px">
+            <canvas id="pixCanvas" style="width:100%"></canvas>
+          </div>
+          <p class="pixel-hud" id="pixHud" style="min-height:1.4rem">Move your cursor over the image…</p>
+        </div>
+        <div>
+          <h3>Magnifier <span class="badge">zoom ×6</span></h3>
+          <div class="canvas-frame" style="max-width:300px"><canvas id="magCanvas" width="240" height="240"></canvas></div>
+          <h3>Selected Pixel</h3>
+          <div class="eq-slot" id="eqCoord"></div>
+          <div class="eq-slot" id="eqRGB"></div>
+          <div id="colorRow" style="margin:.5rem 0;display:flex;align-items:center;gap:.7rem">
+            <span class="swatch" id="pixSwatch"></span><span id="pixHex" class="stat" style="font-size:1rem"></span>
+          </div>
+          <div class="eq-slot" id="eqGray"></div>
+          <div class="info-note"><b>A digital image is ultimately a collection of numbers.</b> Each pixel is a small vector of channel intensities.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= STAGE 2: MATRIX ================= -->
+  <section id="screen-matrix" class="screen hidden">
+    <div class="card">
+      <h2>Stage 2 — The Image IS a Matrix</h2>
+      <p class="lead">We shrink the image to an 8×8 grid so you can see every number. <b>Hover a cell</b> to highlight that pixel — and hover the image to highlight the cell.</p>
+      <div class="grid2">
+        <div>
+          <div class="switch-row">
+            <button id="mmNum" class="small active" onclick="setMatrixMode('numbers')">NUMBERS</button>
+            <button id="mmCol" class="small" onclick="setMatrixMode('colors')">COLORS</button>
+            <button id="mmBoth" class="small" onclick="setMatrixMode('both')">BOTH</button>
+          </div>
+          <div id="matrixWrap" style="overflow-x:auto"></div>
+          <p class="pixel-hud" id="mhud" style="min-height:1.2rem">Hover a cell…</p>
+        </div>
+        <div>
+          <h3>Where each cell lives in the image</h3>
+          <div class="canvas-frame" style="max-width:420px"><canvas id="matrixImgCanvas" style="width:100%"></canvas></div>
+          <div class="eq-slot" id="eqIij"></div>
+          <p class="lead" style="margin-top:.4rem"><b>(i)</b> = row &nbsp;·&nbsp; <b>(j)</b> = column &nbsp;·&nbsp; <b>I<sub>ij</sub></b> = intensity at that location</p>
+        </div>
+      </div>
+      <div id="rgbMatrixBlock" class="hidden">
+        <h3>An RGB image is <u>three</u> matrices, not one</h3>
+        <div class="switch-row">
+          <button class="small active" id="chR" onclick="setChannel('R')">RED CHANNEL</button>
+          <button class="small" id="chG" onclick="setChannel('G')">GREEN CHANNEL</button>
+          <button class="small" id="chB" onclick="setChannel('B')">BLUE CHANNEL</button>
+        </div>
+        <div id="channelMatrixWrap" style="overflow-x:auto"></div>
+        <div class="eq-slot" id="eqRGBconcept"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TRANSITION ================= -->
+  <section id="screen-transition" class="screen hidden">
+    <div class="card">
+      <h2 class="center">What exactly are we transforming?</h2>
+      <p class="lead center" style="max-width:760px;margin:0 auto">Two very different things live inside an image. Keeping them apart is the key idea of this lab.</p>
+      <div class="grid2" style="margin-top:1rem">
+        <div class="card" style="margin:0">
+          <h3>1 · The <span class="highlight">image matrix</span> stores pixel values</h3>
+          <div class="eq-slot" id="eqI"></div>
+          <p class="lead">It answers: <i>“How bright / what colour is each pixel?”</i> Rotating it with a 2×2 matrix is <b>not</b> how images rotate.</p>
+        </div>
+        <div class="card" style="margin:0">
+          <h3>2 · The <span class="highlight">transformation matrix</span> acts on coordinates</h3>
+          <div class="eq-slot" id="eqVec"></div>
+          <div class="eq-slot" id="eqAp"></div>
+          <p class="lead">It answers: <i>“Where does each pixel <b>move to</b>?”</i> A geometric matrix like rotation acts on the coordinate vector <b>p</b>, never on the intensity matrix directly.</p>
+        </div>
+      </div>
+      <div class="boxed" style="text-align:center">
+        <div class="eq-slot" id="eqBoxed"></div>
+        <p class="lead" style="margin:0"><b>Intensity matrix = what you see. Transformation matrix = where each point goes.</b></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= COORDINATE VIEW ================= -->
+  <section id="screen-coordinates" class="screen hidden">
+    <div class="card">
+      <h2>Coordinates — Pixels become Vectors</h2>
+      <p class="lead">Every pixel lives at a coordinate. The origin is the <b>centre of the image</b>; y points up (true Cartesian style). <b>Click a point</b>, then press <b>TRANSFORM</b>.</p>
+      <div class="grid2">
+        <div>
+          <div class="switch-row">
+            <button id="ivImg" class="small active" onclick="setCoordView('image')">IMAGE VIEW</button>
+            <button id="ivCoor" class="small" onclick="setCoordView('coords')">COORDINATE VIEW</button>
+          </div>
+          <div class="canvas-frame" style="max-width:560px"><canvas id="coordCanvas" style="width:100%"></canvas></div>
+          <div class="switch-row">
+            <button class="small" onclick="setCoordView('coords');demoRotate()">DEMO: ROTATE 45°</button>
+          </div>
+        </div>
+        <div>
+          <h3>Selected point</h3>
+          <div class="eq-slot" id="eqPoint"></div>
+          <div class="eq-slot" id="eqPointA"></div>
+          <div class="eq-slot" id="eqPointCalc"></div>
+          <div class="eq-slot" id="eqPointResult"></div>
+          <div style="margin-top:1rem" class="switch-row">
+            <button class="small primary" onclick="animatePointTransform()">▶ TRANSFORM THE POINT</button>
+            <button class="small ghost" onclick="clearPoint()">RESET</button>
+          </div>
+          <div class="info-note" id="coordNote">Click any point on the grid to select it.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PLAYGROUND ================= -->
+  <section id="screen-playground" class="screen hidden">
+    <div class="card">
+      <h2 class="center">Transformation Playground</h2>
+      <p class="lead center" style="max-width:800px;margin:0 auto 1rem">Pick a transformation on the left. The matrix <b>A</b> updates live, and the whole coordinate space is re-drawn on the right. <b class="hide-in-classroom">p′ = A p</b></p>
+      <div class="grid3">
+        <div class="card" style="margin:0">
+          <h3>Original Image</h3>
+          <div class="canvas-frame"><canvas id="pgOrig" style="width:100%"></canvas></div>
+        </div>
+        <div class="card" style="margin:0">
+          <h3>Matrix &amp; Controls</h3>
+          <div class="eq-slot" id="eqAMatrix"></div>
+          <div class="stat">det(A) = <span id="pgDet" style="color:var(--accent2)">1</span></div>
+          <div class="switch-row">
+            <button id="tRot" class="small active" onclick="setTransformType('rotation')">ROTATION</button>
+            <button id="tScl" class="small" onclick="setTransformType('scaling')">SCALING</button>
+            <button id="tRef" class="small" onclick="setTransformType('reflection')">REFLECTION</button>
+            <button id="tShe" class="small" onclick="setTransformType('shear')">SHEAR</button>
+            <button id="tCus" class="small" onclick="setTransformType('custom')">CUSTOM</button>
+          </div>
+          <div id="ctl-rotation" class="ctrl"><label>Angle θ (degrees)</label><input type="range" id="slRot" min="-180" max="180" value="30" oninput="onRotSlider()"/><div class="pixel-hud" id="rotVal">30°</div></div>
+          <div id="ctl-scaling" class="ctrl hidden"><label>Horizontal scale s<sub>x</sub></label><input type="range" id="slSx" min="0.25" max="3" step="0.05" value="1" oninput="onScale()"/><label style="margin-top:.5rem">Vertical scale s<sub>y</sub></label><input type="range" id="slSy" min="0.25" max="3" step="0.05" value="1" oninput="onScale()"/><div class="pixel-hud" id="scaleType">UNIFORM SCALING</div></div>
+          <div id="ctl-reflection" class="ctrl hidden">
+            <div class="switch-row"><button class="small" onclick="setReflect('x')">ACROSS x-AXIS</button><button class="small" onclick="setReflect('y')">ACROSS y-AXIS</button><button class="small" onclick="setReflect('yx')">ACROSS y=x</button></div>
+          </div>
+          <div id="ctl-shear" class="ctrl hidden"><div class="switch-row"><button class="small" id="shHoriz" onclick="setShearAxis('h')">HORIZONTAL SHEAR</button><button class="small" onclick="setShearAxis('v')">VERTICAL SHEAR</button></div><label>Shear factor k</label><input type="range" id="slK" min="-1.5" max="1.5" step="0.05" value="0.5" oninput="onShear()"/><div class="pixel-hud" id="shearVal">k = 0.5</div></div>
+          <div id="ctl-custom" class="ctrl hidden">
+            <p class="lead" style="margin:0 0 .5rem">Type any 2×2 matrix — watch everything update live.</p>
+            <div style="display:flex;gap:.5rem;justify-content:center">
+              <input type="number" id="cuA" step="0.1" value="1" style="width:4.4rem" oninput="onCustom()"/><input type="number" id="cuB" step="0.1" value="0" style="width:4.4rem" oninput="onCustom()"/><br/>
+            </div>
+            <div style="display:flex;gap:.5rem;justify-content:center">
+              <input type="number" id="cuC" step="0.1" value="0" style="width:4.4rem" oninput="onCustom()"/><input type="number" id="cuD" step="0.1" value="1" style="width:4.4rem" oninput="onCustom()"/>
+            </div>
+          </div>
+          <div class="ctrl hide-in-classroom"><label>Interpolation</label><select id="interpSel" onchange="setInterp(this.value)"><option value="nearest">NEAREST NEIGHBOR</option><option value="bilinear">BILINEAR</option></select></div>
+          <div class="switch-row"><button class="small ghost" onclick="resetPlayground()">RESET</button></div>
+          <div class="info-note" id="pgNote"></div>
+        </div>
+        <div class="card" style="margin:0">
+          <h3>Transformed Image</h3>
+          <div class="canvas-frame"><canvas id="pgTrans" style="width:100%"></canvas></div>
+          <p class="pixel-hud" id="pgSize"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BASIS VECTORS -->
+    <div class="card">
+      <h2>Basis Vectors — <span style="color:var(--accent2)">The columns of the matrix tell us where the basis vectors go.</span></h2>
+      <div class="grid2">
+        <div class="canvas-frame" style="max-width:460px"><canvas id="basisCanvas" width="440" height="440"></canvas></div>
+        <div>
+          <div class="eq-slot" id="eqE"></div>
+          <div class="eq-slot" id="eqAe"></div>
+          <p class="lead">Watch the unit vectors <b>e₁</b> and <b>e₂</b> (dashed) swing to their new positions <b>A·e₁</b> and <b>A·e₂</b> (solid). This is the <b>column picture</b>: the first column of A is where e₁ lands, the second column is where e₂ lands.</p>
+          <div class="switch-row"><button class="small" onclick="animBasis()">▶ ANIMATE</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DETERMINANT -->
+    <div class="card">
+      <h2>What happened to AREA?</h2>
+      <div class="grid2">
+        <div>
+          <div class="canvas-frame" style="max-width:460px"><canvas id="sqCanvas" width="440" height="440"></canvas></div>
+          <p class="pixel-hud">Unit square (area 1) → parallelogram (area |det A|).</p>
+        </div>
+        <div>
+          <div class="eq-slot" id="eqDet"></div>
+          <p class="lead"><b>det(A) = 2</b> ⇒ the area doubles. <b>det(A) = 0</b> ⇒ the square collapses into a line — information about one spatial dimension has been lost.</p>
+          <div class="boxed" style="text-align:center"><b id="detMsg"></b></div>
+          <div class="switch-row hide-in-classroom">
+            <button class="small" onclick="setDetDemo('2')">det = 2 (double)</button>
+            <button class="small" onclick="setDetDemo('0.5')">det = 0.5 (halve)</button>
+            <button class="small" onclick="setDetDemo('0')">det = 0 (collapse)</button>
+            <button class="small" onclick="setDetDemo('neg')">det &lt; 0 (flip)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CALCULATOR -->
+    <div class="card">
+      <h2>Matrix × Vector Calculator</h2>
+      <div class="grid2">
+        <div>
+          <div class="switch-row">
+            <span class="lead" style="margin:0;align-self:center">p = [</span>
+            <input type="number" id="calX" value="3" style="width:4.4rem" oninput="calcLive()"/>
+            <input type="number" id="calY" value="2" style="width:4.4rem" oninput="calcLive()"/>
+            <span class="lead" style="margin:0;align-self:center">]</span>
+          </div>
+          <div class="switch-row">
+            <span class="lead" style="margin:0;align-self:center">A = [</span>
+            <input type="number" id="calA" value="1" step="0.1" style="width:4.4rem" oninput="calcLive()"/>
+            <input type="number" id="calB" value="1" step="0.1" style="width:4.4rem" oninput="calcLive()"/>
+            <input type="number" id="calC" value="0" step="0.1" style="width:4.4rem" oninput="calcLive()"/>
+            <input type="number" id="calD" value="1" step="0.1" style="width:4.4rem" oninput="calcLive()"/>
+            <span class="lead" style="margin:0;align-self:center">]</span>
+          </div>
+          <div class="canvas-frame" style="max-width:380px"><canvas id="calcCanvas" width="360" height="360"></canvas></div>
+        </div>
+        <div>
+          <div class="eq-slot" id="eqCalc1"></div>
+          <div class="eq-slot" id="eqCalc2"></div>
+          <div class="info-note"><b>COLUMN WAY:</b> A·p is a linear combination of A's columns, weighted by p's entries.</div>
+          <div class="eq-slot" id="eqCalc3"></div>
+          <div class="boxed"><b class="good">A·p = x·(first column) + y·(second column)</b> — the seed of linear combinations, span and column space.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPOSITION -->
+    <div class="card">
+      <h2>What if we perform TWO transformations?</h2>
+      <p class="lead">First p′ = A·p, then p″ = B·p′. Together: <b>p″ = (B·A)·p</b> — one matrix does the work of two.</p>
+      <div class="grid3">
+        <div class="card" style="margin:0">
+          <h3>First: A</h3>
+          <div class="eq-slot" id="eqCompA"></div>
+          <select id="compA" onchange="compLive()" class="hide-in-classroom">
+            <option value="rot">Rotation 45°</option><option value="sclx">Stretch x ×2</option><option value="sclu">Scale ½</option><option value="shear">Shear k=1</option><option value="refl">Reflect y=x</option>
+          </select>
+          <div class="canvas-frame"><canvas id="compAimg" style="width:100%"></canvas></div>
+        </div>
+        <div class="card" style="margin:0">
+          <h3>Then: B</h3>
+          <div class="eq-slot" id="eqCompB"></div>
+          <select id="compB" onchange="compLive()" class="hide-in-classroom">
+            <option value="sclx">Stretch x ×2</option><option value="rot">Rotation 45°</option><option value="sclu">Scale ½</option><option value="shear">Shear k=1</option><option value="refl">Reflect y=x</option>
+          </select>
+          <div class="canvas-frame"><canvas id="compBimg" style="width:100%"></canvas></div>
+        </div>
+        <div class="card" style="margin:0">
+          <h3>C = B·A <span class="badge">one matrix</span></h3>
+          <div class="eq-slot" id="eqCompC"></div>
+          <div class="canvas-frame"><canvas id="compCimg" style="width:100%"></canvas></div>
+        </div>
+      </div>
+      <div class="boxed" style="text-align:center">
+        <div class="eq-slot" id="eqCompSwap"></div>
+        <div class="switch-row" style="justify-content:center"><button class="small" onclick="compSwap()">SWAP ORDER</button></div>
+        <p class="lead" style="margin:0"><b id="compMsg"></b></p>
+      </div>
+      <div class="notice" id="compNotice" style="display:none">
+        <b>AB ≠ BA !</b> ROTATE → STRETCH is not the same as STRETCH → ROTATE. Order matters — that's why matrix multiplication is defined the way it is.
+      </div>
+    </div>
+
+    <!-- INVERSE -->
+    <div class="card">
+      <h2>Undo, using Mathematics</h2>
+      <div class="grid2">
+        <div>
+          <div class="eq-slot" id="eqInv"></div>
+          <p class="lead">If p′ = A·p, then p = A⁻¹·p′. Apply the inverse and watch the image return.</p>
+          <div class="switch-row">
+            <button class="small primary" id="btnInv" onclick="applyInverse()">APPLY INVERSE</button>
+            <button class="small ghost" onclick="resetPlayground()">RESET TRANSFORM</button>
+          </div>
+          <div class="notice" id="invMsg" style="display:none"><b>This transformation cannot be perfectly reversed.</b> det(A) = 0 — the square collapsed flat, so A⁻¹ does not exist.</div>
+        </div>
+        <div>
+          <div class="canvas-frame" style="max-width:420px"><canvas id="invCanvas" style="width:100%"></canvas></div>
+          <p class="pixel-hud" id="invLabel">Original</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BEFORE / AFTER MATRIX -->
+    <div class="card">
+      <h2>Before / After — the matrix that changes</h2>
+      <p class="lead">A geometric transform does <b>not</b> add/subtract pixel values. It changes <b>where</b> each output pixel samples the original. Because transformed coordinates rarely land on integer pixels, we need <b>interpolation</b>.</p>
+      <div class="grid3">
+        <div class="card" style="margin:0">
+          <h3>ORIGINAL IMAGE MATRIX</h3>
+          <div class="canvas-frame" style="max-width:220px"><canvas id="baOrigImg" style="width:100%"></canvas></div>
+          <div id="baOrigMtx" style="overflow-x:auto"></div>
+        </div>
+        <div class="card" style="margin:0">
+          <h3>TRANSFORMED IMAGE ARRAY</h3>
+          <div class="canvas-frame" style="max-width:220px"><canvas id="baTransImg" style="width:100%"></canvas></div>
+          <div id="baTransMtx" style="overflow-x:auto"></div>
+        </div>
+        <div class="card" style="margin:0">
+          <h3>Interpolation</h3>
+          <div class="switch-row"><button class="small" id="ipN" onclick="setBAInterp('nearest')">NEAREST NEIGHBOR</button><button class="small" id="ipB" onclick="setBAInterp('bilinear')">BILINEAR</button></div>
+          <p class="lead"><b>Nearest:</b> round the sample coordinate → chunky, but no new colors. <b>Bilinear:</b> blend the 4 neighbours → smooth edges.</p>
+          <div class="boxed" style="text-align:center">Sampling = asking <i>“which input pixel does this output pixel read from?”</i></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FULL PIPELINE ================= -->
+  <section id="screen-pipeline" class="screen hidden">
+    <div class="card">
+      <h2 class="center">The Full Pipeline</h2>
+      <p class="lead center">Everything you just did, in one animated sequence.</p>
+      <div class="center" style="margin:1rem 0"><button class="primary" onclick="playPipeline()">▶ PLAY PIPELINE</button></div>
+      <div id="pipeList"></div>
+      <div class="boxed" style="text-align:center;margin-top:1.4rem">
+        <p style="color:var(--dim);margin-bottom:.3rem">ONE EQUATION BEHIND THE TRANSFORMATION</p>
+        <div class="eq-slot" id="eqOneEq"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONCEPT MAP ================= -->
+  <section id="screen-conceptmap" class="screen hidden">
+    <div class="card">
+      <h2 class="center">What mathematics did you just use?</h2>
+      <p class="lead center">Every step of this lab maps to an idea from Linear Algebra.</p>
+      <div class="cmap" id="cmap"></div>
+      <div class="boxed" style="text-align:center;margin-top:1.4rem">
+        <p style="font-size:1.2rem"><b>These ideas will appear throughout your Linear Algebra course.</b></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GUIDED DEMO OVERLAY ================= -->
+  <div class="guide" id="guideOverlay">
+    <div class="box">
+      <div class="step-count" id="gdCount"></div>
+      <div class="step-title" id="gdTitle"></div>
+      <div class="reveal-text" id="gdReveal"></div>
+      <div class="nav">
+        <button id="gdBack" onclick="gdStep(-1)">← BACK</button>
+        <button id="gdRevealBtn" onclick="gdReveal()">REVEAL</button>
+        <button id="gdNext" class="primary" onclick="gdStep(1)">NEXT →</button>
+        <button class="ghost" onclick="endGuidedDemo()">EXIT</button>
+      </div>
+    </div>
+  </div>
+</main>
+<footer>
+  <span style="font-size:1.15rem;font-weight:600">A matrix can represent an action on space.</span>
+</footer>
+<script>  'use strict';
+/* ============================================================
+   IMAGE → MATRIX LAB — single-file simulation
+   Math: 2×2 matrices act on coordinate vectors. Image intensity
+   arrays are separate: we re-sample pixels through inverse mapping.
+   ============================================================ */
+
+// ---------- KaTeX helpers ----------
+function katexNow(){ return (typeof katex !== 'undefined'); }
+function K(tex, display){
+  const el = document.createElement('span');
+  el.style.display = (display === false) ? 'inline-block' : 'block';
+  el.style.textAlign = 'center';
+  if (katexNow()){ try{ katex.render(tex, el, {throwOnError:false, displayMode: (display!==false)}); }
+    catch(e){ el.textContent = tex; } }
+  else el.textContent = tex;
+  return el;
+}
+function putEq(id, tex, display){ const s = document.getElementById(id); if(s){ s.innerHTML=''; s.appendChild(K(tex, display)); } }
+
+// ---------- 2×2 matrix library (row-major: [a,b,c,d]) ----------
+const Mat = {
+  mul: (A, v) => [A[0]*v[0] + A[1]*v[1], A[2]*v[0] + A[3]*v[1]],          // A·v
+  mmul: (A, B) => [A[0]*B[0]+A[1]*B[2], A[0]*B[1]+A[1]*B[3],              // A·B (apply B first)
+                  A[2]*B[0]+A[3]*B[2], A[2]*B[1]+A[3]*B[3]],
+  det: A => A[0]*A[3] - A[1]*A[2],
+  inv: A => { const d = Mat.det(A); if (Math.abs(d) < 1e-9) return null;
+              return [A[3]/d, -A[1]/d, -A[2]/d, A[0]/d]; },
+  rot: deg => { const t = deg*Math.PI/180, c = Math.cos(t), s = Math.sin(t); return [c, -s, s, c]; },
+  scale: (sx, sy) => [sx, 0, 0, sy],
+  shear: (k, horiz) => horiz ? [1, k, 0, 1] : [1, 0, k, 1],
+  refl: (axis) => axis==='x' ? [1,0,0,-1] : axis==='y' ? [-1,0,0,1] : [0,1,1,0],
+};
+
+// ---------- Global state ----------
+const S = {
+  screen: 'home',
+  img: null,            // ImageData (working image)
+  canvas: null,         // source canvas holding S.img
+  gray: false,
+  W: 0, H: 0,
+  matrixSize: 8,
+  matrixMode: 'numbers',
+  channel: 'R',
+  selPix: null,         // selected pixel in stage 1
+  hoverPix: null,
+  coordView: 'image',
+  coordPoint: null,     // {x,y} world coords
+  coordA: Mat.rot(45),
+  coordAnim: null,
+  tType: 'rotation',
+  A: Mat.rot(30),       // playground matrix
+  shearAxis: 'h',
+  interp: 'nearest',
+  baInterp: 'nearest',
+  compA: 'rot', compB: 'sclx',
+  invAnim: null,
+  classroom: false,
+  gd: null,             // guided demo state
+};
+
+// ---------- Sample image generators ----------
+function makeSample(kind, W, H){
+  W = W || 480; H = H || 360;
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const ctx = c.getContext('2d');
+  const id = ctx.createImageData(W, H); const d = id.data;
+  for (let y = 0; y < H; y++){
+    for (let x = 0; x < W; x++){
+      const i = (y*W + x)*4;
+      if (kind === 'gradient'){
+        d[i]   = Math.round(255 * x/W);
+        d[i+1] = Math.round(255 * y/H);
+        d[i+2] = Math.round(128 + 127*Math.sin(x/W*Math.PI));
+      } else if (kind === 'checker'){
+        const cell = 40, on = ((Math.floor(x/cell) + Math.floor(y/cell)) % 2) === 0;
+        d[i] = on ? 24 : 235; d[i+1] = on ? 40 : 235; d[i+2] = on ? 66 : 235;
+      } else { // shapes: sky, sun, house, tree
+        d[i] = 40; d[i+1] = 90; d[i+2] = 150; // sky
+        const dx = x-360, dy = y-80; if (dx*dx + dy*dy < 2500){ d[i]=255; d[i+1]=210; d[i+2]=70; }
+        if (x>90 && x<300 && y>190 && y<330){ d[i]=235; d[i+1]=230; d[i+2]=215; }        // house body
+        if (x>130 && x<180 && y>230 && y<330){ d[i]=90; d[i+1]=70; d[i+2]=60; }          // door
+        if (y>130 && y<220 && x>90 && x<300){ // roof triangle
+          const t = (x-90)/210; if (y > 130 + 90*Math.abs(t-0.5)*2){ d[i]=200; d[i+1]=70; d[i+2]=60; } }
+        if ((x-380)*(x-380) + (y-260)*(y-260) < 1600){ d[i]=60; d[i+1]=160; d[i+2]=70; } // tree crown
+        if (x>374 && x<386 && y>280 && y<330){ d[i]=110; d[i+1]=80; d[i+2]=50; }        // trunk
+      }
+      d[i+3] = 255;
+    }
+  }
+  ctx.putImageData(id, 0, 0);
+  return c;
+}
+
+// ---------- Loading ----------
+function setImage(canvas, silent){
+  const ctx = canvas.getContext('2d');
+  S.img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  S.canvas = canvas; S.W = canvas.width; S.H = canvas.height;
+  S.selPix = null; S.hoverPix = null; S.coordPoint = null;
+  S.A = Mat.rot(30); S.tType = 'rotation';
+  resetCustomInputs();
+  updateHomeInfo();
+  document.getElementById('homeInfo').classList.remove('hidden');
+  if (!silent) document.getElementById('homeInfo').scrollIntoView({behavior:'smooth'});
+}
+function updateHomeInfo(){
+  const total = S.W*S.H;
+  document.getElementById('statW').textContent = S.W;
+  document.getElementById('statH').textContent = S.H;
+  document.getElementById('statC').textContent = S.gray ? 1 : 3;
+  putEq('eqPixels', '\\text{Total pixels} = ' + S.W + ' \\times ' + S.H + ' = ' + total.toLocaleString());
+  putEq('eqShape', S.gray
+    ? '\\text{Shape: } (' + S.H + ',' + S.W + ')'
+    : '\\text{Shape: } (' + S.H + ',' + S.W + ',3)');
+  const hc = document.getElementById('homeCanvas');
+  hc.width = S.W; hc.height = S.H;
+  hc.style.maxWidth = '100%'; hc.style.maxHeight = '360px';
+  hc.getContext('2d').drawImage(S.canvas, 0, 0);
+}
+function loadFile(file){
+  const fr = new FileReader();
+  fr.onload = e => {
+    const im = new Image();
+    im.onload = () => {
+      const c = document.createElement('canvas');
+      c.width = im.naturalWidth; c.height = im.naturalHeight;
+      c.getContext('2d').drawImage(im, 0, 0);
+      setImage(c);
+    };
+    im.src = e.target.result;
+  };
+  fr.readAsDataURL(file);
+}
+
+// ---------- Navigation ----------
+const PIPELINE = ['home','pixels','matrix','transition','coordinates','playground','matrixview','pipeline','conceptmap'];
+const PIPE_LABELS = { home:'IMAGE', pixels:'PIXELS', matrix:'MATRIX', transition:'TRANSITION',
+  coordinates:'COORDINATES', playground:'TRANSFORMATION', matrixview:'NEW IMAGE', pipeline:'PIPELINE', conceptmap:'CONCEPT MAP' };
+const PIPE_DONE = { home:0, pixels:1, matrix:2, transition:3, coordinates:4, playground:5, matrixview:6, pipeline:7, conceptmap:8 };
+function renderPipeline(){
+  const p = document.getElementById('pipeline');
+  p.innerHTML = '';
+  ['IMAGE','PIXELS','MATRIX','COORDINATES','TRANSFORMATION','NEW IMAGE'].forEach((lab, i) => {
+    if (i) p.appendChild(Object.assign(document.createElement('span'), {className:'pipe-arrow', textContent:'→'}));
+    const sp = document.createElement('span');
+    sp.className = 'pipe'; sp.textContent = lab; sp.dataset.stage = i;
+    const idx = PIPELINE.indexOf(S.screen);
+    if (i === PIPE_DONE[S.screen]) sp.classList.add('active');
+    else if (i < PIPE_DONE[S.screen]) sp.classList.add('done');
+    sp.onclick = () => goScreen(PIPELINE[i+1] || 'pipeline');
+    p.appendChild(sp);
+  });
+}
+function goScreen(name){
+  if (!PIPELINE.includes(name)) name = 'home';
+  if (name !== 'home' && !S.img){ goScreen('home'); return; }
+  S.screen = name;
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  const sec = document.getElementById('screen-' + name);
+  if (sec) sec.classList.remove('hidden');
+  renderPipeline();
+  window.scrollTo({top:0, behavior:'smooth'});
+  if (name === 'pixels') renderPixels();
+  if (name === 'matrix') renderMatrixStage();
+  if (name === 'transition') renderTransition();
+  if (name === 'coordinates') renderCoords();
+  if (name === 'playground') renderPlayground();
+  if (name === 'conceptmap') renderConceptMap();
+}
+
+// ---------- Classroom mode ----------
+function toggleClassroom(){
+  S.classroom = !S.classroom;
+  document.body.classList.toggle('classroom', S.classroom);
+  document.getElementById('btnClassroom').classList.toggle('active', S.classroom);
+}
+
+// ---------- Home ----------
+function setupHome(){
+  const zone = document.getElementById('uploadZone'), fi = document.getElementById('fileInput');
+  zone.onclick = () => fi.click();
+  fi.onchange = () => { if (fi.files[0]) loadFile(fi.files[0]); };
+  zone.ondragover = e => { e.preventDefault(); zone.classList.add('drag'); };
+  zone.ondragleave = () => zone.classList.remove('drag');
+  zone.ondrop = e => { e.preventDefault(); zone.classList.remove('drag');
+    if (e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]); };
+  const samples = document.getElementById('samples');
+  [['gradient','Gradient'],['checker','Checkerboard'],['shapes','Geometric Scene']].forEach(([k, name]) => {
+    const t = document.createElement('div'); t.className = 'sample-thumb';
+    const cv = document.createElement('canvas'); cv.width = 120; cv.height = 90;
+    cv.getContext('2d').drawImage(makeSample(k), 0, 0, 120, 90);
+    const lab = document.createElement('div'); lab.className = 't'; lab.textContent = name;
+    t.appendChild(cv); t.appendChild(lab);
+    t.onclick = () => setImage(makeSample(k));
+    samples.appendChild(t);
+  });
+}
+// ============================================================
+// STAGE 1 — PIXELS (magnifier, grid, RGB / GRAYSCALE)
+// ============================================================
+function setGray(g){ S.gray = g; renderPixels();
+  document.getElementById('modeRGB').classList.toggle('active', !g);
+  document.getElementById('modeGRAY').classList.toggle('active', g);
+  document.getElementById('colorRow').classList.toggle('hidden', g); }
+function grayOf(d, i){ return Math.round(0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2]); }
+function drawToCanvas(cv, gray){
+  cv.width = S.W; cv.height = S.H;
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0,0,S.W,S.H);
+  ctx.drawImage(S.canvas, 0, 0);
+  if (gray){
+    const id = ctx.getImageData(0,0,S.W,S.H), dd = id.data;
+    for (let i=0;i<dd.length;i+=4){ const g = grayOf(dd,i); dd[i]=dd[i+1]=dd[i+2]=g; }
+    ctx.putImageData(id,0,0);
+  }
+}
+function renderPixels(){
+  const cv = document.getElementById('pixCanvas');
+  drawToCanvas(cv, S.gray);
+  const ctx = cv.getContext('2d');
+  cv.onmousemove = e => {
+    const r = cv.getBoundingClientRect();
+    const x = Math.floor((e.clientX - r.left) * S.W / r.width);
+    const y = Math.floor((e.clientY - r.top) * S.H / r.height);
+    if (x<0||y<0||x>=S.W||y>=S.H) return;
+    S.hoverPix = [x,y]; drawMagnifier(x,y);
+    const i = (y*S.W+x)*4, d = S.img.data;
+    if (S.gray) document.getElementById('pixHud').textContent =
+      `(${x},${y})  I = ${grayOf(d,i)}`;
+    else document.getElementById('pixHud').textContent =
+      `(${x},${y})  RGB = (${d[i]},${d[i+1]},${d[i+2]})`;
+  };
+  cv.onmouseleave = () => { document.getElementById('pixHud').textContent = 'Move your cursor over the image…';
+    const m = document.getElementById('magCanvas').getContext('2d');
+    m.fillStyle = '#06070c'; m.fillRect(0,0,240,240); };
+  cv.onclick = e => {
+    const r = cv.getBoundingClientRect();
+    const x = Math.floor((e.clientX - r.left) * S.W / r.width);
+    const y = Math.floor((e.clientY - r.top) * S.H / r.height);
+    selectPixel(x, y);
+  };
+}
+function drawMagnifier(px, py){
+  const m = document.getElementById('magCanvas').getContext('2d');
+  m.fillStyle = '#06070c'; m.fillRect(0,0,240,240);
+  const n = 8, cell = 30, d = S.img.data, gray = S.gray;
+  for (let j=0;j<n;j++) for (let i=0;i<n;i++){
+    const x = Math.min(S.W-1, Math.max(0, px + i - Math.floor(n/2)));
+    const y = Math.min(S.H-1, Math.max(0, py + j - Math.floor(n/2)));
+    const k = (y*S.W+x)*4;
+    let r = d[k], g = d[k+1], b = d[k+2];
+    if (gray){ const v = grayOf(d,k); r=g=b=v; }
+    m.fillStyle = `rgb(${r},${g},${b})`; m.fillRect(i*cell, j*cell, cell, cell);
+    m.strokeStyle = 'rgba(255,255,255,.12)'; m.lineWidth = 1; m.strokeRect(i*cell+.5, j*cell+.5, cell, cell);
+  }
+  // highlight the true cursor pixel
+  m.strokeStyle = '#22d3ee'; m.lineWidth = 3;
+  m.strokeRect((n/2-0.5)*cell, (n/2-0.5)*cell, cell, cell);
+}
+function selectPixel(x, y){
+  S.selPix = [x,y];
+  const i = (y*S.W+x)*4, d = S.img.data;
+  const r=d[i], g=d[i+1], b=d[i+2];
+  putEq('eqCoord', `\\text{Coordinate: } \\mathbf p = \\begin{bmatrix} ${x} \\\\ ${y} \\end{bmatrix}`);
+  if (S.gray){
+    const v = grayOf(d,i);
+    putEq('eqRGB', `\\text{Intensity: } I(${x},${y}) = ${v}`);
+    document.getElementById('eqGray').innerHTML = '';
+  } else {
+    putEq('eqRGB', `\\mathbf p = \\begin{bmatrix} ${r} \\\\ ${g} \\\\ ${b} \\end{bmatrix} = \\text{RGB vector}`);
+    putEq('eqGray', `I(${x},${y}) = ${grayOf(d,i)} \\quad \\text{(grayscale intensity)}`);
+    const sw = document.getElementById('pixSwatch'); sw.style.background = `rgb(${r},${g},${b})`;
+    document.getElementById('pixHex').textContent =
+      '#' + [r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('').toUpperCase();
+  }
+}
+
+// ============================================================
+// STAGE 2 — MATRIX (8×8 numbers / colors / both + hover sync)
+// ============================================================
+function thumbN(n, gray){
+  const c = document.createElement('canvas'); c.width = n; c.height = n;
+  const ctx = c.getContext('2d');
+  ctx.imageSmoothingEnabled = true;
+  ctx.drawImage(S.canvas, 0, 0, n, n);
+  let id = ctx.getImageData(0,0,n,n);
+  if (gray){
+    const dd = id.data;
+    for (let i=0;i<dd.length;i+=4){ const v = grayOf(dd,i); dd[i]=dd[i+1]=dd[i+2]=v; }
+    ctx.putImageData(id,0,0);
+  }
+  return {canvas:c, data:id.data};
+}
+function matrixValues(){
+  const n = S.matrixSize;
+  const t = thumbN(n, true);
+  const vals = [];
+  for (let y=0;y<n;y++){ const row=[];
+    for (let x=0;x<n;x++) row.push(t.data[(y*n+x)*4]);
+    vals.push(row); }
+  return {vals, n};
+}
+function channelValues(ch){
+  const n = S.matrixSize, t = thumbN(n, false), idx = {R:0,G:1,B:2}[ch];
+  const vals = [];
+  for (let y=0;y<n;y++){ const row=[];
+    for (let x=0;x<n;x++) row.push(t.data[(y*n+x)*4 + idx]);
+    vals.push(row); }
+  return {vals, n};
+}
+function buildMatrixTable(vals, n, showColors, isRGB, showText){
+  const tbl = document.createElement('table'); tbl.className = 'mtx-table';
+  for (let i=0;i<n;i++){
+    const tr = document.createElement('tr');
+    for (let j=0;j<n;j++){
+      const td = document.createElement('td');
+      const v = vals[i][j];
+      if (showColors){ const ch = thumbN(n,false).data; const k=(i*n+j)*4;
+        td.style.background = isRGB ? `rgb(${ch[k]},${ch[k+1]},${ch[k+2]})` : `rgb(${v},${v},${v})`;
+        td.style.color = (isRGB ? (0.299*ch[k]+0.587*ch[k+1]+0.114*ch[k+2]) : v) > 140 ? '#111' : '#fff'; }
+      td.textContent = (showText === false) ? '' : v;
+      td.dataset.i = i; td.dataset.j = j;
+      td.onmouseenter = () => hoverCell(i,j);
+      td.onmouseleave = () => { clearCellHot(); document.getElementById('mhud').textContent = 'Hover a cell…'; };
+      tr.appendChild(td);
+    }
+    tbl.appendChild(tr);
+  }
+  return tbl;
+}
+function renderMatrixStage(){
+  const n = S.matrixSize;
+  drawToCanvas(document.getElementById('matrixImgCanvas'), false);
+  const {vals} = matrixValues();
+  const mode = S.matrixMode;
+  const showColor = mode==='colors' || mode==='both';
+  const showText = mode==='numbers' || mode==='both';
+  const wrap = document.getElementById('matrixWrap');
+  wrap.innerHTML = '';
+  wrap.appendChild(buildMatrixTable(vals, n, showColor, false, showText));
+  putEq('eqIij', `I_{ij} = \\text{intensity at row } i, \\text{ column } j`);
+  // RGB block
+  const rgbBlock = document.getElementById('rgbMatrixBlock');
+  if (S.gray){ rgbBlock.classList.add('hidden'); }
+  else {
+    rgbBlock.classList.remove('hidden');
+    renderChannelMatrix();
+  }
+  // image hover -> cell
+  const cv = document.getElementById('matrixImgCanvas');
+  cv.onmousemove = e => {
+    const r = cv.getBoundingClientRect();
+    const x = Math.floor((e.clientX - r.left) * S.W / r.width);
+    const y = Math.floor((e.clientY - r.top) * S.H / r.height);
+    if (x<0||y<0||x>=S.W||y>=S.H) return;
+    const i = Math.min(n-1, Math.floor(y*n/S.H));
+    const j = Math.min(n-1, Math.floor(x*n/S.W));
+    highlightCellOnly(i,j);
+    document.getElementById('mhud').textContent = `Image pixel (${x},${y}) → matrix cell I[${i}][${j}]`;
+  };
+  cv.onmouseleave = clearCellHot;
+}
+function renderChannelMatrix(){
+  const {vals, n} = channelValues(S.channel);
+  const wrap = document.getElementById('channelMatrixWrap');
+  wrap.innerHTML = '';
+  wrap.appendChild(buildMatrixTable(vals, n, false, false));
+  putEq('eqRGBconcept', `\\text{RGB Image} = (\\text{R matrix}, \\text{G matrix}, \\text{B matrix})`);
+}
+function setChannel(ch){ S.channel = ch;
+  ['chR','chG','chB'].forEach(id => document.getElementById(id).classList.remove('active'));
+  document.getElementById('ch'+ch).classList.add('active');
+  renderChannelMatrix(); }
+function setMatrixMode(m){ S.matrixMode = m;
+  ['mmNum','mmCol','mmBoth'].forEach(id => document.getElementById(id).classList.remove('active'));
+  document.getElementById('mm'+({numbers:'Num',colors:'Col',both:'Both'})[m]).classList.add('active');
+  renderMatrixStage(); }
+function cellIndexToPixels(i,j){
+  return { x0: Math.floor(j*S.W/S.matrixSize), y0: Math.floor(i*S.H/S.matrixSize),
+           x1: Math.floor((j+1)*S.W/S.matrixSize), y1: Math.floor((i+1)*S.H/S.matrixSize) };
+}
+function hoverCell(i,j){
+  const {x0,y0,x1,y1} = cellIndexToPixels(i,j);
+  const cv = document.getElementById('matrixImgCanvas');
+  const ctx = cv.getContext('2d');
+  ctx.drawImage(S.canvas, 0, 0);
+  ctx.fillStyle = 'rgba(34,211,238,.28)';
+  ctx.fillRect(x0,y0,x1-x0,y1-y0);
+  ctx.strokeStyle = '#22d3ee'; ctx.lineWidth = 2;
+  ctx.strokeRect(x0+.5,y0+.5,x1-x0-1,y1-y0-1);
+  document.getElementById('mhud').textContent = `Matrix cell I[${i}][${j}] → image region (${x0}–${x1}, ${y0}–${y1})`;
+}
+function highlightCellOnly(i,j){
+  document.querySelectorAll('.mtx-table td').forEach(td =>
+    td.classList.toggle('hot', +td.dataset.i===i && +td.dataset.j===j));
+}
+function clearCellHot(){
+  document.querySelectorAll('.mtx-table td').forEach(td => td.classList.remove('hot'));
+  const cv = document.getElementById('matrixImgCanvas');
+  if (cv && cv.getContext) cv.getContext('2d').drawImage(S.canvas, 0, 0);
+}
+// ============================================================
+// COORDINATE VIEW — pixels become vectors, p′ = A·p
+// ============================================================
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+function worldFromPixel(px, py){
+  return { x: px - (S.W-1)/2, y: - (py - (S.H-1)/2) };   // y flips: image y ↓, Cartesian y ↑
+}
+function renderCoords(){
+  const cv = document.getElementById('coordCanvas');
+  cv.width = Math.min(S.W, 560); cv.height = Math.min(S.H, 420);
+  const ctx = cv.getContext('2d');
+  const scale = cv.width / (Math.max(S.W,S.H) * 1.15);
+  const toCx = wx => cv.width/2 + wx*scale;
+  const toCy = wy => cv.height/2 - wy*scale;
+  ctx.fillStyle = '#06070c'; ctx.fillRect(0,0,cv.width,cv.height);
+  // faint image in both views
+  ctx.save(); ctx.globalAlpha = S.coordView==='image' ? 0.85 : 0.18;
+  ctx.drawImage(S.canvas, (cv.width-S.W*scale)/2, (cv.height-S.H*scale)/2, S.W*scale, S.H*scale);
+  ctx.restore();
+  // grid lines every 32 px of image space
+  ctx.strokeStyle = 'rgba(120,150,220,.14)'; ctx.lineWidth = 1;
+  const step = Math.max(8, Math.round(32*scale/ (S.W/10)) ) ;
+  const u = Math.max(16, Math.round(16/scale)); // units
+  for (let g=-Math.ceil(cv.width/scale/2/u); g<=Math.ceil(cv.width/scale/2/u); g++){
+    ctx.beginPath(); ctx.moveTo(toCx(g*u), 0); ctx.lineTo(toCx(g*u), cv.height); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, toCy(g*u)); ctx.lineTo(cv.width, toCy(g*u)); ctx.stroke();
+  }
+  // axes
+  ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(0, toCy(0)); ctx.lineTo(cv.width, toCy(0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(toCx(0), 0); ctx.lineTo(toCx(0), cv.height); ctx.stroke();
+  ctx.fillStyle = '#8b98b8'; ctx.font = '12px monospace';
+  ctx.fillText('x', cv.width-16, toCy(0)-6); ctx.fillText('y', toCx(0)+6, 14);
+  // sampled pixel points (coordinate view)
+  if (S.coordView === 'coords'){
+    const n = 22, d = S.img.data;
+    ctx.fillStyle = '#fff';
+    for (let i=0;i<n;i++) for (let j=0;j<n;j++){
+      const px = Math.round(j*(S.W-1)/(n-1)), py = Math.round(i*(S.H-1)/(n-1));
+      const w = worldFromPixel(px, py);
+      const k=(py*S.W+px)*4;
+      ctx.fillStyle = `rgb(${d[k]},${d[k+1]},${d[k+2]})`;
+      ctx.beginPath(); ctx.arc(toCx(w.x), toCy(w.y), 2.6, 0, 7); ctx.fill();
+    }
+  }
+  // selected point + vector
+  if (S.coordPoint){
+    const p = S.coordPoint;
+    ctx.strokeStyle = '#22d3ee'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(toCx(0), toCy(0)); ctx.lineTo(toCx(p.x), toCy(p.y)); ctx.stroke();
+    ctx.fillStyle = '#22d3ee'; ctx.beginPath(); ctx.arc(toCx(p.x), toCy(p.y), 6, 0, 7); ctx.fill();
+    ctx.fillStyle = '#22d3ee'; ctx.font = 'bold 13px monospace';
+    ctx.fillText(`p = (${p.x}, ${p.y})`, toCx(p.x)+8, toCy(p.y)-8);
+    // transformed target
+    const p2 = Mat.mul(S.coordA, [p.x, p.y]);
+    ctx.strokeStyle = '#f87171'; ctx.lineWidth = 3; ctx.setLineDash([6,5]);
+    ctx.beginPath(); ctx.moveTo(toCx(0), toCy(0)); ctx.lineTo(toCx(p2[0]), toCy(p2[1])); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#f87171'; ctx.beginPath(); ctx.arc(toCx(p2[0]), toCy(p2[1]), 6, 0, 7); ctx.fill();
+    ctx.fillStyle = '#f87171'; ctx.font = 'bold 13px monospace';
+    ctx.fillText(`p′ = (${p2[0].toFixed(1)}, ${p2[1].toFixed(1)})`, toCx(p2[0])+8, toCy(p2[1])-8);
+  }
+  // click handling
+  cv.onclick = e => {
+    const r = cv.getBoundingClientRect();
+    const wx = (e.clientX - r.left - cv.width/2) / scale;
+    const wy = -(e.clientY - r.top - cv.height/2) / scale;
+    S.coordPoint = { x: Math.round(wx*4)/4, y: Math.round(wy*4)/4 };
+    updateCoordEqs(); renderCoords();
+  };
+}
+function updateCoordEqs(){
+  const p = S.coordPoint, A = S.coordA;
+  if (!p){ return; }
+  const [a,b,c,d] = A;
+  putEq('eqPoint', `\\mathbf p = \\begin{bmatrix} ${p.x} \\\\ ${p.y} \\end{bmatrix}`);
+  putEq('eqPointA', `A = \\begin{bmatrix} ${a} & ${b} \\\\ ${c} & ${d} \\end{bmatrix}`);
+  const xp = a*p.x + b*p.y, yp = c*p.x + d*p.y;
+  putEq('eqPointCalc', `\\mathbf p' = A\\mathbf p = \\begin{bmatrix} ${a} & ${b} \\\\ ${c} & ${d} \\end{bmatrix}\\begin{bmatrix} ${p.x} \\\\ ${p.y} \\end{bmatrix} = \\begin{bmatrix} ${a}\\cdot${p.x} + ${b}\\cdot${p.y} \\\\ ${c}\\cdot${p.x} + ${d}\\cdot${p.y} \\end{bmatrix}`);
+  putEq('eqPointResult', `\\mathbf p' = \\begin{bmatrix} ${Math.round(xp*10)/10} \\\\ ${Math.round(yp*10)/10} \\end{bmatrix}`);
+}
+function setCoordView(v){ S.coordView = v;
+  document.getElementById('ivImg').classList.toggle('active', v==='image');
+  document.getElementById('ivCoor').classList.toggle('active', v==='coords');
+  renderCoords();
+  document.getElementById('coordNote').textContent =
+    v==='coords' ? 'Pixels rendered as points on a Cartesian plane. Click one to make it a vector.'
+                 : 'Click any point on the grid to select it.';
+}
+function demoRotate(){ S.coordA = Mat.rot(45);
+  if (!S.coordPoint) S.coordPoint = { x: Math.round(S.W/8), y: Math.round(S.H/8) };
+  updateCoordEqs(); renderCoords();
+  document.getElementById('coordNote').textContent = 'Rotation 45° is previewed in red. Press TRANSFORM THE POINT to animate.'; }
+function animatePointTransform(){
+  if (!S.coordPoint) return;
+  const p = S.coordPoint, A = S.coordA, p2 = Mat.mul(A,[p.x,p.y]);
+  const cv = document.getElementById('coordCanvas');
+  const scale = cv.width / (Math.max(S.W,S.H) * 1.15);
+  const toCx = wx => cv.width/2 + wx*scale, toCy = wy => cv.height/2 - wy*scale;
+  const t0 = performance.now(), D = 1400;
+  function frame(now){
+    const t = Math.min(1, (now-t0)/D);
+    const qx = p.x + (p2[0]-p.x)*t, qy = p.y + (p2[1]-p.y)*t;
+    const ctx = cv.getContext('2d');
+    // redraw underlying scene
+    const save = S.coordPoint; S.coordPoint = {x:qx,y:qy};
+    renderCoords(); S.coordPoint = save;
+    ctx.strokeStyle = '#f87171'; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.arc(toCx(qx), toCy(qy), 7, 0, 7); ctx.stroke();
+    if (t < 1) requestAnimationFrame(frame);
+    else { S.coordPoint = {x:Math.round(p2[0]*10)/10, y:Math.round(p2[1]*10)/10};
+      updateCoordEqs(); renderCoords();
+      document.getElementById('coordNote').textContent = 'p moved to p′ = A·p. The red vector is the image of the blue vector.'; }
+  }
+  requestAnimationFrame(frame);
+}
+function clearPoint(){ S.coordPoint = null; renderCoords();
+  document.getElementById('coordNote').textContent = 'Click any point on the grid to select it.'; }
+
+// ============================================================
+// TRANSFORMED IMAGE — inverse mapping + interpolation
+// ============================================================
+function transformCanvas(srcCanvas, A, interp){
+  const W = srcCanvas.width, H = srcCanvas.height;
+  const src = srcCanvas.getContext('2d').getImageData(0,0,W,H).data;
+  const cx = W/2, cy = H/2;   // image centre in CONTINUOUS coords
+  // bounding box from the pixel BOUNDARY corners (no clipping)
+  const corners = [[-cx,-cy],[W-cx,-cy],[W-cx,H-cy],[-cx,H-cy]].map(c => Mat.mul(A,c));
+  let minX=1e9,maxX=-1e9,minY=1e9,maxY=-1e9;
+  corners.forEach(c => { minX=Math.min(minX,c[0]); maxX=Math.max(maxX,c[0]);
+                         minY=Math.min(minY,c[1]); maxY=Math.max(maxY,c[1]); });
+  const nw = Math.max(1, Math.ceil(maxX-minX)), nh = Math.max(1, Math.ceil(maxY-minY));
+  const Ai = Mat.inv(A);
+  if (!Ai) return null;
+  const oc = document.createElement('canvas'); oc.width = nw; oc.height = nh;
+  const octx = oc.getContext('2d');
+  const out = octx.createImageData(nw, nh); const od = out.data;
+  for (let oy=0; oy<nh; oy++){
+    const v = minY + oy + 0.5;
+    for (let ox=0; ox<nw; ox++){
+      const u = minX + ox + 0.5;              // output pixel centre (centered coords)
+      const pc = Mat.mul(Ai, [u, v]);         // A⁻¹ · u  → input centered coords
+      const ix = pc[0] + cx - 0.5;            // input frame → index space (pixel i centre = i+0.5)
+      const iy = pc[1] + cy - 0.5;
+      const k = (oy*nw + ox)*4;
+      if (interp === 'bilinear'){
+        const x0 = Math.floor(ix), y0 = Math.floor(iy), fx = ix-x0, fy = iy-y0;
+        const x0c=clamp(x0,0,W-1), x1c=clamp(x0+1,0,W-1), y0c=clamp(y0,0,H-1), y1c=clamp(y0+1,0,H-1);
+        for (let ch=0; ch<3; ch++){
+          const tl=src[(y0c*W+x0c)*4+ch], tr=src[(y0c*W+x1c)*4+ch];
+          const bl=src[(y1c*W+x0c)*4+ch], br=src[(y1c*W+x1c)*4+ch];
+          const top = tl*(1-fx)+tr*fx, bot = bl*(1-fx)+br*fx;
+          od[k+ch] = Math.round(top*(1-fy)+bot*fy);
+        }
+      } else {
+        const xi = clamp(Math.round(ix),0,W-1), yi = clamp(Math.round(iy),0,H-1);
+        const si = (yi*W+xi)*4;
+        od[k]=src[si]; od[k+1]=src[si+1]; od[k+2]=src[si+2];
+      }
+      od[k+3] = 255;
+    }
+  }
+  octx.putImageData(out, 0, 0);
+  return oc;
+}
+function smallSource(maxDim){
+  maxDim = maxDim || 340;
+  const s = Math.min(1, maxDim / Math.max(S.W, S.H));
+  const c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round(S.W*s)); c.height = Math.max(1, Math.round(S.H*s));
+  c.getContext('2d').drawImage(S.canvas, 0, 0, c.width, c.height);
+  return c;
+}
+function showCanvas(cv, el){
+  el.width = cv.width; el.height = cv.height;
+  el.style.maxWidth = '100%';
+  el.getContext('2d').drawImage(cv, 0, 0);
+}
+function renderTransformed(){
+  const src = smallSource();
+  const t = transformCanvas(src, S.A, S.interp);
+  if (!t){ document.getElementById('pgTrans').getContext('2d').clearRect(0,0,10,10); return; }
+  showCanvas(t, document.getElementById('pgTrans'));
+  document.getElementById('pgSize').textContent =
+    `output size: ${t.width} × ${t.height} px  ·  det(A) = ${Mat.det(S.A).toFixed(3)}`;
+  const d = Mat.det(S.A);
+  document.getElementById('pgDet').textContent = Math.round(d*1000)/1000;
+}
+// ============================================================
+// PLAYGROUND CONTROLS
+// ============================================================
+function setTransformType(t){ S.tType = t;
+  ['tRot','tScl','tRef','tShe','tCus'].forEach(id => document.getElementById(id).classList.remove('active'));
+  document.getElementById('t'+t[0].toUpperCase()+t.slice(1)).classList.add('active');
+  ['rotation','scaling','reflection','shear','custom'].forEach(c =>
+    document.getElementById('ctl-'+c).classList.toggle('hidden', c!==t));
+  if (t==='rotation') S.A = Mat.rot(+document.getElementById('slRot').value);
+  else if (t==='scaling') onScale();
+  else if (t==='shear') onShear();
+  else if (t==='custom') onCustom();
+  renderPlayground();
+}
+function onRotSlider(){
+  const v = +document.getElementById('slRot').value;
+  document.getElementById('rotVal').textContent = v + '°';
+  S.A = Mat.rot(v); renderPlayground();
+}
+function onScale(){
+  const sx = +document.getElementById('slSx').value, sy = +document.getElementById('slSy').value;
+  document.getElementById('scaleType').textContent =
+    Math.abs(sx-sy) < 0.001 ? 'UNIFORM SCALING' : 'NON-UNIFORM SCALING';
+  S.A = Mat.scale(sx, sy); renderPlayground();
+}
+function onShear(){
+  const k = +document.getElementById('slK').value;
+  document.getElementById('shearVal').textContent = 'k = ' + k;
+  S.A = Mat.shear(k, S.shearAxis==='h'); renderPlayground();
+}
+function setShearAxis(a){ S.shearAxis = a;
+  document.getElementById('shHoriz').classList.toggle('active', a==='h');
+  onShear(); }
+function setReflect(axis){ S.A = Mat.refl(axis); renderPlayground(); }
+function onCustom(){
+  S.A = [+document.getElementById('cuA').value || 0, +document.getElementById('cuB').value || 0,
+         +document.getElementById('cuC').value || 0, +document.getElementById('cuD').value || 0];
+  renderPlayground();
+}
+function resetCustomInputs(){
+  ['cuA','cuB','cuC','cuD'].forEach((id,i) => { const el = document.getElementById(id);
+    if (el) el.value = [1,0,0,1][i]; });
+}
+function resetPlayground(){
+  S.A = Mat.rot(30); S.interp = S.interp; S.tType = 'rotation';
+  document.getElementById('slRot').value = 30; document.getElementById('rotVal').textContent = '30°';
+  document.getElementById('slSx').value = 1; document.getElementById('slSy').value = 1;
+  document.getElementById('slK').value = 0.5;
+  resetCustomInputs();
+  setTransformType('rotation');
+  document.getElementById('invLabel').textContent = 'Original';
+}
+function setInterp(v){ S.interp = v; renderTransformed(); renderBA(); }
+function renderPlayground(){
+  const d = Mat.det(S.A);
+  putEq('eqAMatrix', `A = \\begin{bmatrix} ${fmt(S.A[0])} & ${fmt(S.A[1])} \\\\ ${fmt(S.A[2])} & ${fmt(S.A[3])} \\end{bmatrix} \\qquad \\det(A) = ${fmt(d)}`);
+  document.getElementById('pgDet').textContent = fmt(d);
+  const inv = Mat.inv(S.A);
+  const invBtn = document.getElementById('btnInv');
+  invBtn.disabled = !inv;
+  document.getElementById('invMsg').style.display = inv ? 'none' : 'block';
+  document.getElementById('pgNote').innerHTML =
+    d === 0 ? '<b class="bad">det = 0 — the space collapses; A is NOT invertible.</b>'
+    : Math.abs(d) < 1 ? '<b class="warn">|det| &lt; 1 — the image shrinks in area.</b>'
+    : d > 1 ? '<b class="good">|det| &gt; 1 — the image grows in area.</b>'
+    : '<b>|det| = 1 — area is preserved.</b>';
+  showCanvas(S.canvas, document.getElementById('pgOrig'));
+  renderTransformed();
+  renderBasis();
+  renderSquare();
+  renderBA();
+  compLive();
+  renderInv();
+}
+const fmt = v => Math.round(v*1000)/1000;
+
+// ---------- Basis vectors ----------
+function renderBasis(t){
+  t = t == null ? 1 : t;
+  const cv = document.getElementById('basisCanvas');
+  const ctx = cv.getContext('2d');
+  ctx.fillStyle = '#06070c'; ctx.fillRect(0,0,cv.width,cv.height);
+  const c = cv.width/2, u = cv.width/4.4;
+  ctx.strokeStyle = 'rgba(255,255,255,.14)'; ctx.lineWidth = 1;
+  for (let g=-4;g<=4;g++){ ctx.beginPath(); ctx.moveTo(c+g*u,0); ctx.lineTo(c+g*u,cv.height); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,c+g*u); ctx.lineTo(cv.width,c+g*u); ctx.stroke(); }
+  ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(0,c); ctx.lineTo(cv.width,c); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(c,0); ctx.lineTo(c,cv.height); ctx.stroke();
+  const A = S.A;
+  const e1 = [1,0], e2 = [0,1], a1 = Mat.mul(A,e1), a2 = Mat.mul(A,e2);
+  const L = (v,col,w,dash) => {
+    ctx.strokeStyle = col; ctx.lineWidth = w;
+    if (dash) ctx.setLineDash(dash);
+    ctx.beginPath(); ctx.moveTo(c,c); ctx.lineTo(c+v[0]*u*t, c-v[1]*u*t); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = col; ctx.beginPath(); ctx.arc(c+v[0]*u*t, c-v[1]*u*t, 5, 0, 7); ctx.fill();
+  };
+  L([0,1],'rgba(139,152,184,.5)',2,[5,5]); L([1,0],'rgba(139,152,184,.5)',2,[5,5]);
+  L(a1,'#4f8cff',4); L(a2,'#22d3ee',4);
+  ctx.fillStyle = '#4f8cff'; ctx.font = 'bold 14px monospace';
+  ctx.fillText('A·e₁ = ('+fmt(a1[0])+', '+fmt(a1[1])+')', c+10, 24);
+  ctx.fillStyle = '#22d3ee';
+  ctx.fillText('A·e₂ = ('+fmt(a2[0])+', '+fmt(a2[1])+')', c+10, 46);
+  putEq('eqE', `\\mathbf e_1 = \\begin{bmatrix} 1 \\\\ 0 \\end{bmatrix},\\qquad \\mathbf e_2 = \\begin{bmatrix} 0 \\\\ 1 \\end{bmatrix}`);
+  putEq('eqAe', `A\\mathbf e_1 = \\begin{bmatrix} ${fmt(a1[0])} \\\\ ${fmt(a1[1])} \\end{bmatrix},\\qquad A\\mathbf e_2 = \\begin{bmatrix} ${fmt(a2[0])} \\\\ ${fmt(a2[1])} \\end{bmatrix}`);
+}
+function animBasis(){
+  const t0 = performance.now();
+  function frame(now){ const t = Math.min(1, (now-t0)/1300); renderBasis(t);
+    if (t<1) requestAnimationFrame(frame); }
+  requestAnimationFrame(frame);
+}
+
+// ---------- Unit square / determinant ----------
+function renderSquare(){
+  const cv = document.getElementById('sqCanvas');
+  const ctx = cv.getContext('2d');
+  ctx.fillStyle = '#06070c'; ctx.fillRect(0,0,cv.width,cv.height);
+  const c = cv.width/2, u = cv.width/4.4, A = S.A, d = Mat.det(A);
+  ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(0,c); ctx.lineTo(cv.width,c); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(c,0); ctx.lineTo(c,cv.height); ctx.stroke();
+  const P = [[0,0],[1,0],[1,1],[0,1]].map(p => Mat.mul(A,p));
+  const sq = [[0,0],[1,0],[1,1],[0,1]];
+  const poly = (pts, col, fill) => {
+    ctx.beginPath();
+    ctx.moveTo(c+pts[0][0]*u, c-pts[0][1]*u);
+    for (let i=1;i<pts.length;i++) ctx.lineTo(c+pts[i][0]*u, c-pts[i][1]*u);
+    ctx.closePath();
+    ctx.fillStyle = fill || 'transparent'; ctx.fill();
+    ctx.strokeStyle = col; ctx.lineWidth = 3; ctx.stroke();
+  };
+  poly(sq, 'rgba(139,152,184,.6)', 'rgba(139,152,184,.08)');
+  poly(P, '#f87171', 'rgba(248,113,113,.18)');
+  ctx.fillStyle = '#f87171'; ctx.font = 'bold 15px monospace';
+  ctx.fillText('Area before = 1', c-110, 30);
+  ctx.fillStyle = '#22d3ee';
+  ctx.fillText('Area after = |det(A)| = '+Math.abs(Math.round(d*1000)/1000), c-150, cv.height-22);
+  putEq('eqDet', `\\det(A) = ad - bc = ${fmt(A[0])}\\cdot${fmt(A[3])} - (${fmt(A[1])})\\cdot(${fmt(A[2])}) = ${fmt(d)}`);
+  const msg = document.getElementById('detMsg');
+  if (Math.abs(d) < 1e-6) msg.innerHTML = '<span class="bad">det = 0 — the square collapses into a line. Information about one spatial dimension has been lost.</span>';
+  else if (d < 0) msg.innerHTML = '<span class="warn">det &lt; 0 — area is preserved but the orientation flips (mirror).</span>';
+  else if (Math.abs(d-1) < 1e-6) msg.innerHTML = '<span class="good">det = 1 — area unchanged.</span>';
+  else msg.innerHTML = '<span class="good">Area scales by |det(A)| = '+Math.abs(fmt(d))+' — invertible iff det ≠ 0.</span>';
+}
+function setDetDemo(kind){
+  if (kind==='2') S.A = [2,0,0,1];
+  else if (kind==='0.5') S.A = [0.5,0,0,1];
+  else if (kind==='0') S.A = [1,0,0,0];
+  else S.A = [0,1,1,0];
+  resetCustomInputs();
+  renderPlayground();
+}
+
+// ---------- Matrix × Vector calculator ----------
+function calcLive(){
+  const x=+document.getElementById('calX').value||0, y=+document.getElementById('calY').value||0;
+  const a=+document.getElementById('calA').value||0, b=+document.getElementById('calB').value||0;
+  const c1=+document.getElementById('calC').value||0, d1=+document.getElementById('calD').value||0;
+  const A=[a,b,c1,d1], p=[x,y], pp=Mat.mul(A,p);
+  putEq('eqCalc1', `A\\mathbf p = \\begin{bmatrix} ${fmt(a)} & ${fmt(b)} \\\\ ${fmt(c1)} & ${fmt(d1)} \\end{bmatrix}\\begin{bmatrix} ${x} \\\\ ${y} \\end{bmatrix} = \\begin{bmatrix} ${fmt(a)}\\cdot${x} + ${fmt(b)}\\cdot${y} \\\\ ${fmt(c1)}\\cdot${x} + ${fmt(d1)}\\cdot${y} \\end{bmatrix}`);
+  putEq('eqCalc2', `= \\begin{bmatrix} ${fmt(pp[0])} \\\\ ${fmt(pp[1])} \\end{bmatrix}`);
+  putEq('eqCalc3', `A\\mathbf p = ${x}\\underbrace{\\begin{bmatrix} ${fmt(a)} \\\\ ${fmt(c1)} \\end{bmatrix}}_{\\text{column 1}} + ${y}\\underbrace{\\begin{bmatrix} ${fmt(b)} \\\\ ${fmt(d1)} \\end{bmatrix}}_{\\text{column 2}}`);
+  const cv = document.getElementById('calcCanvas'), ctx = cv.getContext('2d');
+  ctx.fillStyle = '#06070c'; ctx.fillRect(0,0,cv.width,cv.height);
+  const cc = cv.width/2, u = cv.width/6;
+  ctx.strokeStyle = 'rgba(255,255,255,.2)'; ctx.lineWidth = 1;
+  for (let g=-4;g<=4;g++){ ctx.beginPath(); ctx.moveTo(cc+g*u,0); ctx.lineTo(cc+g*u,cv.height); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,cc+g*u); ctx.lineTo(cv.width,cc+g*u); ctx.stroke(); }
+  ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(0,cc); ctx.lineTo(cv.width,cc); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cc,0); ctx.lineTo(cc,cv.height); ctx.stroke();
+  const vec = (v,col) => {
+    ctx.strokeStyle = col; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.moveTo(cc,cc); ctx.lineTo(cc+v[0]*u, cc-v[1]*u); ctx.stroke();
+    ctx.fillStyle = col; ctx.beginPath(); ctx.arc(cc+v[0]*u, cc-v[1]*u, 6, 0, 7); ctx.fill();
+  };
+  vec([a,c1], '#4f8cff'); vec([b,d1], '#22d3ee');
+  vec(p, '#e6ecf7'); vec(pp, '#f87171');
+  ctx.fillStyle = '#8b98b8'; ctx.font = '12px monospace';
+  ctx.fillText('columns of A', cc-100, 20); ctx.fillText('p', cc+8, cc-8); ctx.fillText('A·p', cc+pp[0]*u+8, cc-pp[1]*u-6);
+}
+
+// ---------- Composition ----------
+const PRESETS = {
+  rot:  () => Mat.rot(45),
+  sclx: () => Mat.scale(2, 1),
+  sclu: () => Mat.scale(0.5, 0.5),
+  shear:() => Mat.shear(1, true),
+  refl: () => Mat.refl('yx'),
+};
+function compLive(){
+  S.compA = document.getElementById('compA').value;
+  S.compB = document.getElementById('compB').value;
+  const A = PRESETS[S.compA](), B = PRESETS[S.compB]();
+  const BA = Mat.mmul(B, A), AB = Mat.mmul(A, B);
+  putEq('eqCompA', `A = \\begin{bmatrix} ${fmt(A[0])} & ${fmt(A[1])} \\\\ ${fmt(A[2])} & ${fmt(A[3])} \\end{bmatrix}`);
+  putEq('eqCompB', `B = \\begin{bmatrix} ${fmt(B[0])} & ${fmt(B[1])} \\\\ ${fmt(B[2])} & ${fmt(B[3])} \\end{bmatrix}`);
+  putEq('eqCompC', `C = BA = \\begin{bmatrix} ${fmt(BA[0])} & ${fmt(BA[1])} \\\\ ${fmt(BA[2])} & ${fmt(BA[3])} \\end{bmatrix}`);
+  const src = smallSource(240);
+  showCanvas(transformCanvas(src, A, 'bilinear') || src, document.getElementById('compAimg'));
+  showCanvas(transformCanvas(src, B, 'bilinear') || src, document.getElementById('compBimg'));
+  showCanvas(transformCanvas(src, BA, 'bilinear') || src, document.getElementById('compCimg'));
+  const eq = Math.abs(BA[0]-AB[0])<1e-9 && Math.abs(BA[1]-AB[1])<1e-9 && Math.abs(BA[2]-AB[2])<1e-9 && Math.abs(BA[3]-AB[3])<1e-9;
+  putEq('eqCompSwap', `BA = \\begin{bmatrix} ${fmt(BA[0])} & ${fmt(BA[1])} \\\\ ${fmt(BA[2])} & ${fmt(BA[3])} \\end{bmatrix}\\qquad AB = \\begin{bmatrix} ${fmt(AB[0])} & ${fmt(AB[1])} \\\\ ${fmt(AB[2])} & ${fmt(AB[3])} \\end{bmatrix}`);
+  document.getElementById('compMsg').innerHTML = eq
+    ? '<span class="good">These two happen to commute (AB = BA).</span>'
+    : '<span class="bad">AB ≠ BA — the order of transformations matters!</span>';
+  document.getElementById('compNotice').style.display = eq ? 'none' : 'block';
+  renderCompSwapImgs(BA, AB, eq);
+}
+function compSwap(){
+  const a = document.getElementById('compA'), b = document.getElementById('compB');
+  const t = a.value; a.value = b.value; b.value = t; compLive();
+}
+function renderCompSwapImgs(BA, AB, eq){
+  const host = document.getElementById('eqCompSwap').parentElement;
+  let old = document.getElementById('compSwapImgs');
+  if (old) old.remove();
+  if (eq) return;
+  const wrap = document.createElement('div');
+  wrap.id = 'compSwapImgs';
+  wrap.style.cssText = 'display:flex;gap:1rem;justify-content:center;margin-top:.6rem;flex-wrap:wrap';
+  const src = smallSource(200);
+  [['ROTATE → STRETCH  (BA)', BA], ['STRETCH → ROTATE  (AB)', AB]].forEach(([lab, M]) => {
+    const f = document.createElement('div');
+    const cv = document.createElement('canvas');
+    cv.style.maxWidth = '46%'; cv.style.borderRadius = '.5rem'; cv.style.border = '1px solid var(--border)';
+    const t = transformCanvas(src, M, 'bilinear') || src;
+    showCanvas(t, cv);
+    const cap = document.createElement('div'); cap.style.cssText = 'color:var(--dim);font-size:.85rem;margin-top:.3rem';
+    cap.textContent = lab;
+    f.appendChild(cv); f.appendChild(cap);
+    wrap.appendChild(f);
+  });
+  host.insertBefore(wrap, host.firstChild);
+}
+
+// ---------- Inverse ----------
+function renderInv(){
+  const inv = Mat.inv(S.A);
+  putEq('eqInv', `\\text{if } \\mathbf p' = A\\mathbf p \\text{, then } \\mathbf p = A^{-1}\\mathbf p',\\qquad A^{-1} = \\frac{1}{\\det(A)}\\begin{bmatrix} d & -b \\\\ -c & a \\end{bmatrix}`);
+  if (inv) putEq('eqInv', `A^{-1} = \\begin{bmatrix} ${fmt(inv[0])} & ${fmt(inv[1])} \\\\ ${fmt(inv[2])} & ${fmt(inv[3])} \\end{bmatrix}`);
+  else putEq('eqInv', `A^{-1} \\text{ does not exist — } \\det(A) = 0`);
+  if (S.invAnim === null) drawInvCanvas(S.A);
+}
+function drawInvCanvas(M){
+  const src = smallSource(300);
+  const t = transformCanvas(src, M, S.interp) || src;
+  showCanvas(t, document.getElementById('invCanvas'));
+}
+function applyInverse(){
+  const A = S.A.slice();
+  const I = [1,0,0,1];
+  const t0 = performance.now(), D = 1600;
+  document.getElementById('invLabel').textContent = 'Applying A⁻¹… (morphing back)';
+  function frame(now){
+    const t = Math.min(1, (now-t0)/D);
+    const M = A.map((v,i) => v*(1-t) + I[i]*t);   // homotopy A → I (visually "undoes" the transform)
+    drawInvCanvas(M);
+    if (t<1) requestAnimationFrame(frame);
+    else document.getElementById('invLabel').textContent = 'Back to the original geometry ✓';
+  }
+  requestAnimationFrame(frame);
+}
+
+// ---------- Before / After matrix view ----------
+function renderBA(){
+  const n = 8, src = smallSource(300);
+  const t = transformCanvas(src, S.A, S.baInterp) || src;
+  showCanvas(thumbOf(S.canvas, n), document.getElementById('baOrigImg'));
+  showCanvas(thumbOf(t, n), document.getElementById('baTransImg'));
+  const ov = thumbN2(S.canvas, n, true), tv = thumbN2(t, n, true);
+  document.getElementById('baOrigMtx').innerHTML = '';
+  document.getElementById('baTransMtx').innerHTML = '';
+  document.getElementById('baOrigMtx').appendChild(buildMatrixTable(ov.vals, n, false, false));
+  document.getElementById('baTransMtx').appendChild(buildMatrixTable(tv.vals, n, false, false));
+}
+function thumbOf(cv, n){
+  const c = document.createElement('canvas'); c.width=n; c.height=n;
+  c.getContext('2d').drawImage(cv, 0, 0, n, n); return c;
+}
+function thumbN2(cv, n, gray){
+  const c = thumbOf(cv, n);
+  let id = c.getContext('2d').getImageData(0,0,n,n);
+  const vals = [];
+  for (let y=0;y<n;y++){ const row=[];
+    for (let x=0;x<n;x++) row.push(gray ? grayOf(id.data,(y*n+x)*4) : id.data[(y*n+x)*4]);
+    vals.push(row); }
+  return {vals, n};
+}
+function setBAInterp(v){ S.baInterp = v;
+  document.getElementById('ipN').classList.toggle('active', v==='nearest');
+  document.getElementById('ipB').classList.toggle('active', v==='bilinear');
+  renderBA(); }
+// ============================================================
+// TRANSITION SCREEN
+// ============================================================
+function renderTransition(){
+  putEq('eqI',    `I = [I_{ij}] \\qquad \\text{(m} \\times \\text{n array of pixel values)}`);
+  putEq('eqVec',  `\\mathbf p = \\begin{bmatrix} x \\\\ y \\end{bmatrix} \\qquad \\text{(location of a pixel)}`);
+  putEq('eqAp',   `A\\mathbf p = \\mathbf p' \\qquad \\text{(matrix acts on the coordinate)}`);
+  putEq('eqBoxed', `\\boxed{\\mathbf p' = A\\mathbf p}`);
+}
+
+// ============================================================
+// FULL PIPELINE VIEW
+// ============================================================
+const PIPE_STEPS = [
+  ['IMAGE', 'a photograph is just…'],
+  ['PIXEL VALUES', '…a grid of (R,G,B) numbers'],
+  ['IMAGE ARRAY', 'a matrix of numbers'],
+  ['PIXEL COORDINATES', `\\mathbf p = \\begin{bmatrix} x \\\\ y \\end{bmatrix}`],
+  ['TRANSFORMATION', `\\mathbf p' = A\\mathbf p`],
+  ['NEW COORDINATES', 'every point moved to its image'],
+  ['SAMPLING / INTERPOLATION', 'which input pixel feeds each output pixel?'],
+  ['TRANSFORMED IMAGE', 'the new picture'],
+];
+function renderPipeList(){
+  const host = document.getElementById('pipeList'); host.innerHTML = '';
+  PIPE_STEPS.forEach(([t, d], i) => {
+    const row = document.createElement('div'); row.className = 'pipe-step'; row.id = 'pipeStep'+i;
+    const n = document.createElement('div'); n.className = 'n'; n.textContent = i+1;
+    const tx = document.createElement('div');
+    const t1 = document.createElement('div'); t1.className = 't'; t1.textContent = 'STEP '+(i+1)+' — '+t;
+    const t2 = document.createElement('div'); t2.className = 'd'; t2.innerHTML = d.startsWith('\\') ? '' : d;
+    if (d.startsWith('\\')){ const s = document.createElement('span'); s.className='eq'; s.style.display='block'; s.appendChild(K(d)); t2.appendChild(s); }
+    tx.appendChild(t1); tx.appendChild(t2);
+    row.appendChild(n); row.appendChild(tx);
+    host.appendChild(row);
+  });
+  putEq('eqOneEq', `\\boxed{\\mathbf p' = A\\mathbf p}`);
+}
+function playPipeline(){
+  renderPipeList();
+  for (let i=0;i<PIPE_STEPS.length;i++) document.getElementById('pipeStep'+i).classList.remove('on');
+  let i = 0;
+  const iv = setInterval(() => {
+    if (i>0) document.getElementById('pipeStep'+(i-1)).classList.remove('on');
+    document.getElementById('pipeStep'+i).classList.add('on');
+    i++;
+    if (i >= PIPE_STEPS.length) clearInterval(iv);
+  }, 700);
+}
+
+// ============================================================
+// CONCEPT MAP
+// ============================================================
+function renderConceptMap(){
+  const host = document.getElementById('cmap'); host.innerHTML = '';
+  ['IMAGE','MATRIX / ARRAY','VECTOR','MATRIX × VECTOR','LINEAR COMBINATION','LINEAR TRANSFORMATION','COMPOSITION','MATRIX × MATRIX','DETERMINANT','INVERSE'].forEach((n, i) => {
+    if (i) { const a = document.createElement('div'); a.className='arrow'; a.textContent='↓'; host.appendChild(a); }
+    const nd = document.createElement('div'); nd.className='node'; nd.textContent = n;
+    nd.style.animation = 'fadein .5s ease '+(i*0.12)+'s both';
+    host.appendChild(nd);
+  });
+}
+
+// ============================================================
+// GUIDED DEMO (19 steps, instructor paced)
+// ============================================================
+const GUIDE = [
+  { t:'1 · Upload an image', s:'home', r:'Any photograph works. All processing is local.' },
+  { t:'2 · What does the computer actually see?', s:'pixels', r:'Not a picture — a grid of numbers. Each cell is a pixel.' },
+  { t:'3 · Reveal the pixels', s:'pixels', r:'Move your mouse: the magnifier zooms into individual pixels.' },
+  { t:'4 · Reveal the numerical values', s:'pixels', r:'Click a pixel — it has a coordinate (x, y) and an RGB vector.' , setup:()=>selectPixel(Math.round(S.W*0.35), Math.round(S.H*0.4))},
+  { t:'5 · Reveal the image matrix', s:'matrix', r:'The image becomes an 8×8 array of intensities.' },
+  { t:'6 · Select one pixel (in the matrix)', s:'matrix', r:'Hover a matrix cell — the matching image region lights up.' },
+  { t:'7 · Convert its position into a vector', s:'coordinates', r:'That pixel location is a coordinate vector p with the image centre as origin.', setup:()=>{ S.coordPoint={x:Math.round(S.W/7), y:Math.round(S.H/7)}; S.coordA=Mat.rot(45); updateCoordEqs(); renderCoords(); } },
+  { t:'8 · Introduce the transformation matrix', s:'coordinates', r:'A 2×2 matrix maps p → p′. It acts on coordinates, never on the intensity matrix directly.' },
+  { t:'9 · Transform one vector', s:'coordinates', r:'Press TRANSFORM THE POINT and watch p slide to p′.', setup:()=>{ S.coordPoint={x:Math.round(S.W/7), y:Math.round(S.H/7)}; S.coordA=Mat.rot(45); updateCoordEqs(); renderCoords(); } },
+  { t:'10 · Transform the coordinate grid', s:'coordinates', r:'Switch to COORDINATE VIEW: pixels are points on a Cartesian plane.', setup:()=>setCoordView('coords') },
+  { t:'11 · Transform the complete image', s:'playground', r:'The same matrix applied to every pixel coordinate rebuilds the whole image.', setup:()=>{ setTransformType('rotation'); } },
+  { t:'12 · Try rotation', s:'playground', r:'Drag the angle slider. The image rotates around its centre.', setup:()=>{ setTransformType('rotation'); document.getElementById('slRot').value=60; onRotSlider(); } },
+  { t:'13 · Try shear', s:'playground', r:'Shear turns rectangles into parallelograms.', setup:()=>{ setTransformType('shear'); document.getElementById('slK').value=0.8; onShear(); } },
+  { t:'14 · Show the basis vectors', s:'playground', r:'The columns of A show where e₁ and e₂ land.', setup:()=>{ setTransformType('rotation'); document.getElementById('basisCanvas').scrollIntoView({behavior:'smooth'}); animBasis(); } },
+  { t:'15 · Compose two transformations', s:'playground', r:'Two steps collapse into one matrix: C = B·A.', setup:()=>{ document.querySelectorAll('.card h2')[4] && document.querySelectorAll('.card h2')[4].scrollIntoView({behavior:'smooth'}); } },
+  { t:'16 · Show AB ≠ BA', s:'playground', r:'Swap the order and the final image changes. Order matters.', setup:()=>compSwap() },
+  { t:'17 · Show the determinant', s:'playground', r:'|det A| is the area scaling factor. det = 0 collapses the space.', setup:()=>setDetDemo('0') },
+  { t:'18 · Show the inverse', s:'playground', r:'A⁻¹ undoes A — unless det A = 0.', setup:()=>{ setTransformType('rotation'); document.getElementById('slRot').value=60; onRotSlider(); setTimeout(()=>applyInverse(), 400); } },
+  { t:'19 · Reveal the full mathematical pipeline', s:'pipeline', r:'IMAGE → NUMBERS → MATRIX → COORDINATES → TRANSFORMATION → NEW IMAGE', setup:()=>playPipeline() },
+];
+function startGuidedDemo(){
+  if (!S.img) setImage(makeSample('gradient'));
+  S.gd = { idx: 0, revealed: false };
+  document.getElementById('guideOverlay').classList.add('show');
+  gdRender();
+}
+function endGuidedDemo(){ S.gd = null; document.getElementById('guideOverlay').classList.remove('show'); }
+function gdRender(){
+  const st = GUIDE[S.gd.idx];
+  document.getElementById('gdCount').textContent = 'STEP '+(S.gd.idx+1)+' / '+GUIDE.length;
+  document.getElementById('gdTitle').textContent = st.t;
+  document.getElementById('gdReveal').textContent = S.gd.revealed ? '💡 ' + st.r : '';
+  document.getElementById('gdBack').disabled = S.gd.idx === 0;
+  document.getElementById('gdNext').textContent = S.gd.idx === GUIDE.length-1 ? 'FINISH ✓' : 'NEXT →';
+  goScreen(st.s);
+  if (st.setup) st.setup();
+}
+function gdStep(d){ if (!S.gd) return;
+  S.gd.revealed = false;
+  S.gd.idx = clamp(S.gd.idx + d, 0, GUIDE.length-1);
+  if (S.gd.idx === GUIDE.length-1 && d===1) { endGuidedDemo(); goScreen('pipeline'); playPipeline(); return; }
+  gdRender();
+}
+function gdReveal(){ if (!S.gd) return; S.gd.revealed = true; gdRender(); }
+
+// ============================================================
+// INIT
+// ============================================================
+function init(){
+  setupHome();
+  renderPipeline();
+  if (!S.img) setImage(makeSample('gradient'), true);
+  goScreen('home');
+}
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

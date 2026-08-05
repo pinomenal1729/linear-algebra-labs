@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Careers — FREEAI</title>
+<meta name="description" content="10 careers that run on linear algebra — the math you'll use, the salaries, and which lab to start with." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   FREEAI — CAREERS
+   Careers built on linear algebra.
+   ============================================================ */
+:root{
+  --bg:#04060c; --bg2:#0a0f1e; --panel:rgba(15,22,41,.55);
+  --line:rgba(122,153,224,.16); --line2:rgba(122,153,224,.32);
+  --txt:#eaf1ff; --dim:#93a5c9; --faint:#5f7399;
+  --cyan:#22d3ee; --blue:#4f8cff; --violet:#a78bfa; --pink:#f472b6;
+  --green:#34d399; --amber:#fbbf24; --red:#f87171;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --sans:"Inter",system-ui,-apple-system,Roboto,sans-serif;
+  --disp:"Space Grotesk","Inter",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--txt);background:var(--bg);line-height:1.55;overflow-x:hidden}
+::selection{background:rgba(34,211,238,.35)}
+a{color:inherit;text-decoration:none}
+
+#bg3d{position:fixed;inset:0;z-index:0;pointer-events:none}
+#bg3d canvas{display:block}
+.grid-bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  background-image:
+    linear-gradient(rgba(96,128,190,.07) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(96,128,190,.07) 1px,transparent 1px);
+  background-size:46px 46px;
+  mask-image:radial-gradient(120% 80% at 50% 0%,#000 30%,transparent 100%);
+  -webkit-mask-image:radial-gradient(120% 80% at 50% 0%,#000 30%,transparent 100%);
+}
+body.no3d #bg3d{display:none}
+body.no3d{background:radial-gradient(60% 45% at 20% 20%,rgba(34,211,238,.12),transparent 60%),radial-gradient(50% 40% at 80% 70%,rgba(52,211,153,.10),transparent 60%),var(--bg)}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;padding:14px 26px;gap:16px;
+  background:rgba(5,8,15,.55);border-bottom:1px solid var(--line);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:700;letter-spacing:2px;font-size:19px}
+.brand .mark{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:linear-gradient(135deg,var(--cyan),var(--blue) 50%,var(--violet));color:#04121c;font-size:15px;font-weight:800;box-shadow:0 0 18px rgba(34,211,238,.45)}
+.brand small{font-weight:600;color:var(--dim);font-size:12px;letter-spacing:1px}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-links a{padding:8px 14px;border-radius:10px;font-size:13.5px;font-weight:600;color:var(--dim);transition:all .2s;letter-spacing:.3px}
+.nav-links a:hover{color:var(--txt);background:rgba(122,153,224,.08)}
+.nav-links a.on{color:var(--cyan);background:rgba(34,211,238,.08);box-shadow:inset 0 0 0 1px rgba(34,211,238,.25)}
+@media(max-width:640px){.nav-links a span{display:none}.nav-links a{padding:8px 10px}}
+
+main{position:relative;z-index:2}
+
+/* ============================================================ HERO */
+.hero{
+  min-height:86svh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:120px 20px 40px;
+}
+.hero-inner{max-width:1000px;width:100%}
+.kicker{
+  display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12.5px;letter-spacing:3px;font-weight:600;
+  color:var(--green);padding:8px 16px;border-radius:999px;border:1px solid rgba(52,211,153,.35);
+  background:rgba(52,211,153,.07);text-transform:uppercase;animation:fadeDown .8s .1s both;
+}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:none}}
+.hero h1{
+  font-family:var(--disp);font-weight:700;letter-spacing:2px;font-size:clamp(34px,6.4vw,78px);line-height:1.04;margin:16px 0 10px;
+  background:linear-gradient(100deg,#fff 5%,var(--green) 28%,var(--cyan) 55%,var(--blue) 80%,#fff 95%);
+  background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shimmer 8s ease-in-out infinite,fadeUp .9s .2s both;
+  filter:drop-shadow(0 0 30px rgba(52,211,153,.28));
+}
+@keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+.hero .sub{max-width:620px;margin:0 auto;color:var(--dim);font-size:clamp(15px,1.8vw,18px);animation:fadeUp .9s .35s both}
+.hero .sub b{color:var(--txt)}
+.hero .route{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:26px;animation:fadeUp .9s .5s both}
+.hero .route .r{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:1.2px;padding:8px 14px;border-radius:999px;color:var(--dim);border:1px solid var(--line);background:rgba(15,22,41,.5);backdrop-filter:blur(4px);transition:all .25s}
+.hero .route .r:hover{color:var(--txt);border-color:var(--line2);transform:translateY(-2px)}
+.hero .route .r b{color:var(--green)}
+.scroll-cue{margin-top:42px;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--faint);font-size:11px;letter-spacing:2.5px;text-transform:uppercase;animation:fadeUp 1s 1s both}
+.mouse{width:24px;height:38px;border:2px solid var(--faint);border-radius:14px;position:relative}
+.mouse::after{content:"";position:absolute;left:50%;top:7px;width:4px;height:8px;margin-left:-2px;border-radius:4px;background:var(--green);animation:wheel 1.6s ease-in-out infinite}
+@keyframes wheel{0%{transform:translateY(0);opacity:1}70%{transform:translateY(12px);opacity:0}100%{opacity:0}}
+
+/* ============================================================ CAREER CARDS */
+.careers-sec{padding:70px 20px 80px;max-width:1200px;margin:0 auto}
+.careers-sec h2{
+  font-family:var(--disp);font-size:clamp(26px,3.6vw,42px);font-weight:700;text-align:center;letter-spacing:1px;
+  background:linear-gradient(90deg,#fff,var(--green) 40%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.careers-sec .sub{text-align:center;color:var(--dim);max-width:600px;margin:10px auto 46px;font-size:15.5px}
+.career-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:1020px){.career-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.career-grid{grid-template-columns:1fr}}
+.job{
+  --acc:var(--green);
+  position:relative;display:flex;flex-direction:column;gap:12px;padding:24px 22px;border-radius:18px;overflow:hidden;
+  background:linear-gradient(180deg,rgba(17,25,47,.7),rgba(9,14,27,.7));
+  border:1px solid var(--line);backdrop-filter:blur(8px);
+  transition:transform .3s,box-shadow .3s,border-color .3s;
+  will-change:transform;
+}
+.job:hover{transform:translateY(-6px);border-color:color-mix(in srgb,var(--acc) 45%,transparent);box-shadow:0 24px 54px -18px rgba(0,0,0,.7),0 0 36px -8px color-mix(in srgb,var(--acc) 35%,transparent)}
+.job .top{display:flex;align-items:center;justify-content:space-between}
+.job .ico{width:50px;height:50px;border-radius:13px;display:grid;place-items:center;font-size:25px;background:color-mix(in srgb,var(--acc) 14%,transparent);border:1px solid color-mix(in srgb,var(--acc) 34%,transparent);transition:transform .3s}
+.job:hover .ico{transform:scale(1.12) rotate(-6deg)}
+.job .pay{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--green);border:1px solid rgba(52,211,153,.3);padding:4px 10px;border-radius:999px;background:rgba(52,211,153,.06)}
+.job h3{font-family:var(--disp);font-size:18.5px;font-weight:700;letter-spacing:.3px}
+.job .tagline{color:var(--dim);font-size:13.6px;font-style:italic}
+.job p{color:var(--dim);font-size:13.8px}
+.job .chips{display:flex;flex-wrap:wrap;gap:6px}
+.job .chip{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--txt);padding:4px 10px;border-radius:8px;background:rgba(122,153,224,.1);border:1px solid var(--line)}
+.job .meter{margin-top:auto;display:flex;flex-direction:column;gap:6px}
+.job .meter .m-top{display:flex;justify-content:space-between;font-size:11.5px;color:var(--faint);font-weight:700;letter-spacing:.8px;text-transform:uppercase}
+.job .meter .bar{height:7px;border-radius:99px;background:rgba(122,153,224,.12);overflow:hidden}
+.job .meter .bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--acc),color-mix(in srgb,var(--acc) 55%,#fff));transition:width 1.2s cubic-bezier(.2,.7,.2,1);box-shadow:0 0 12px color-mix(in srgb,var(--acc) 60%,transparent)}
+.job .meter .dots{display:flex;gap:4px}
+.job .meter .dots i{width:9px;height:9px;border-radius:50%;background:rgba(122,153,224,.15);transition:all .5s}
+.job .meter .dots i.on{background:var(--acc);box-shadow:0 0 8px color-mix(in srgb,var(--acc) 80%,transparent)}
+.job .lab{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--cyan);letter-spacing:.6px;text-transform:uppercase}
+.job .lab .larr{transition:transform .2s}
+.job .lab:hover .larr{transform:translateX(4px)}
+
+/* ============================================================ SALARY BARS */
+.salary-sec{max-width:1200px;margin:0 auto;padding:60px 20px 90px}
+.salary-sec h2{font-family:var(--disp);font-size:clamp(24px,3.4vw,38px);font-weight:700;text-align:center}
+.salary-sec .sub{text-align:center;color:var(--dim);font-size:14px;margin:8px 0 36px}
+.salary-box{padding:30px;border-radius:20px;background:linear-gradient(180deg,rgba(17,25,47,.7),rgba(9,14,27,.7));border:1px solid var(--line);backdrop-filter:blur(8px)}
+.srow{display:grid;grid-template-columns:190px 1fr 90px;align-items:center;gap:14px;padding:10px 0;border-bottom:1px dashed rgba(122,153,224,.1)}
+.srow:last-child{border-bottom:none}
+.srow .name{font-size:13.5px;font-weight:600;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srow .bar{height:12px;border-radius:99px;background:rgba(122,153,224,.1);overflow:hidden;position:relative}
+.srow .bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--violet));transition:width 1.4s cubic-bezier(.2,.7,.2,1);box-shadow:0 0 14px rgba(79,140,255,.5)}
+.srow .val{font-family:var(--mono);font-size:12.5px;font-weight:700;color:var(--txt);text-align:right}
+@media(max-width:680px){.srow{grid-template-columns:110px 1fr 74px}}
+
+/* ============================================================ PILLARS */
+.pillars-sec{padding:40px 20px 80px;max-width:1200px;margin:0 auto}
+.pillars-sec h2{font-family:var(--disp);font-size:clamp(24px,3.4vw,38px);font-weight:700;text-align:center}
+.pillars-sec .sub{text-align:center;color:var(--dim);max-width:600px;margin:10px auto 40px}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:900px){.pgrid{grid-template-columns:1fr}}
+.pillar{position:relative;text-align:center;padding:34px 24px;border-radius:20px;overflow:hidden;background:linear-gradient(180deg,rgba(17,25,47,.7),rgba(9,14,27,.7));border:1px solid var(--line);backdrop-filter:blur(8px);transition:all .3s}
+.pillar:hover{transform:translateY(-6px);border-color:var(--line2);box-shadow:0 26px 60px -20px rgba(0,0,0,.75),0 0 40px -10px rgba(34,211,238,.3)}
+.pillar .pnum{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:2px;color:var(--faint)}
+.pillar .pico{font-size:38px;margin:12px 0 6px;display:inline-block;transition:transform .3s}
+.pillar:hover .pico{transform:scale(1.15) rotate(-8deg)}
+.pillar h3{font-family:var(--disp);font-size:20px;font-weight:700;margin-bottom:8px}
+.pillar p{color:var(--dim);font-size:14px}
+.pillar .peq{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--cyan);margin-top:14px;padding:9px;border-radius:10px;background:rgba(6,10,20,.65);border:1px solid var(--line)}
+
+/* ============================================================ CTA + footer */
+.cta-sec{max-width:1200px;margin:0 auto;padding:0 20px 90px;text-align:center}
+.cta-sec h2{font-family:var(--disp);font-size:clamp(24px,3.4vw,38px);font-weight:700}
+.cta-sec p{color:var(--dim);max-width:560px;margin:10px auto 28px}
+.cta-row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
+.cta-btn{display:inline-flex;align-items:center;gap:9px;padding:15px 26px;border-radius:14px;font-weight:700;font-size:14.5px;letter-spacing:.5px;background:linear-gradient(90deg,var(--green),var(--cyan));color:#04121c;box-shadow:0 10px 30px -10px rgba(52,211,153,.6);transition:all .25s}
+.cta-btn.alt{background:linear-gradient(90deg,var(--blue),var(--violet));color:#fff;box-shadow:0 10px 30px -10px rgba(79,140,255,.7)}
+.cta-btn:hover{transform:translateY(-3px);filter:brightness(1.1)}
+.cta-btn .arr{transition:transform .25s}
+.cta-btn:hover .arr{transform:translate(3px,-3px)}
+footer{text-align:center;padding:34px 20px 44px;color:var(--faint);font-size:13px;border-top:1px solid var(--line);background:rgba(5,8,15,.6);backdrop-filter:blur(8px)}
+footer b{color:var(--dim)}
+
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.hero h1,.kicker,.hero .sub,.hero .route,.scroll-cue{animation:none}}
+
+/* ============ liveliness: cursor glow, progress, float, shine ============ */
+.cglow{position:fixed;top:0;left:0;width:520px;height:520px;border-radius:50%;pointer-events:none;z-index:3;
+  background:radial-gradient(circle,rgba(52,211,153,.10),transparent 62%);mix-blend-mode:screen;opacity:0;transition:opacity .35s;will-change:transform}
+.sprog{position:fixed;top:0;left:0;right:0;height:3px;z-index:70;pointer-events:none}
+.sprog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink));box-shadow:0 0 14px rgba(52,211,153,.65)}
+nav.scrolled{background:rgba(5,8,15,.9);box-shadow:0 6px 26px rgba(0,0,0,.45)}
+.hero-inner{animation:heroBob 9s ease-in-out infinite}
+@keyframes heroBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.grid-bg{animation:gridPan 26s linear infinite}
+@keyframes gridPan{to{background-position:46px 46px}}
+.job{overflow:hidden}
+.job::before{content:"";position:absolute;top:-20%;left:-75%;width:45%;height:140%;transform:skewX(-22deg);pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.08),transparent);transition:left .7s ease}
+.job:hover::before{left:135%}
+.cta-btn{position:relative;overflow:hidden}
+.cta-btn::after{content:"";position:absolute;top:-20%;left:-75%;width:45%;height:140%;transform:skewX(-22deg);pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.22),transparent);transition:left .7s ease}
+.cta-btn:hover::after{left:135%}
+@media(prefers-reduced-motion:reduce){.hero-inner,.grid-bg{animation:none}}
+</style>
+</head>
+<body>
+<div id="bg3d" aria-hidden="true"></div>
+<div class="grid-bg" aria-hidden="true"></div>
+<div class="cglow" aria-hidden="true"></div>
+<div class="sprog" aria-hidden="true"><i></i></div>
+
+<nav>
+  <a class="brand" href="index.html"><span class="mark">⬡</span>FREEAI<small>· MATH → CODE</small></a>
+  <div class="nav-links">
+    <a href="index.html">⚡ <span>Hub</span></a>
+    <a href="applications.html">🌌 <span>Applications</span></a>
+    <a class="on" href="careers.html">🚀 <span>Careers</span></a>
+  </div>
+</nav>
+
+<main>
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="kicker">Careers · the payoff of the math</span>
+      <h1>CAREERS BUILT<br/>ON MATRICES</h1>
+      <p class="sub">Every AI breakthrough, every AAA game, every rocket launch — <b>someone fluent in linear algebra is behind it.</b> Here are 10 careers where this course is the first step.</p>
+      <div class="route">
+        <span class="r">LAB 01 → <b>SEE THE PIXELS</b></span>
+        <span class="r">LAB 02 → <b>RANK THE WEB</b></span>
+        <span class="r">LAB 03 → <b>TRAIN THE MODEL</b></span>
+      </div>
+      <div class="scroll-cue"><div class="mouse"></div>scroll to explore</div>
+    </div>
+  </section>
+
+  <!-- ============ CAREER CARDS ============ -->
+  <section class="careers-sec">
+    <h2 class="reveal">10 careers that pay you to love matrices</h2>
+    <p class="sub reveal">Each card shows the math you'll actually use on the job, the demand, and the freeai lab that starts you on the path.</p>
+    <div class="career-grid">
+
+      <div class="job reveal" style="--acc:var(--green)" data-demand="5">
+        <div class="top"><span class="ico">🤖</span><span class="pay">$110–180k</span></div>
+        <h3>Machine Learning Engineer</h3>
+        <p class="tagline">"I make the models that power AI products."</p>
+        <p>Models are parameter vectors; training is walking downhill on a loss surface. Your entire day is θ ← θ − η·∇L at scale.</p>
+        <div class="chips"><span class="chip">X·θ</span><span class="chip">∇L</span><span class="chip">matrices</span><span class="chip">optimization</span></div>
+        <div class="meter">
+          <div class="m-top"><span>Demand</span><span>Extreme 🔥</span></div>
+          <div class="bar"><i></i></div>
+          <div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+        </div>
+        <a class="lab" href="how-does-a-machine-learn.html" target="_blank" rel="noopener">Start with Lab 03 <span class="larr">→</span></a>
+      </div>
+
+      <div class="job reveal" style="--acc:var(--cyan)" data-demand="5">
+        <div class="top"><span class="ico">📊</span><span class="pay">$100–165k</span></div>
+        <h3>Data Scientist</h3>
+        <p class="tagline">"I turn raw data into decisions."</p>
+        <p>Regression, PCA, covariance — data science is applied linear algebra with a dash of statistics. If it's a spreadsheet, it's a matrix.</p>
+        <div class="chips"><span class="chip">PCA</span><span class="chip">regression</span><span class="chip">covariance</span></div>
+        <div class="meter">
+          <div class="m-top"><span>Demand</span><span>Extreme 🔥</span></div>
+          <div class="bar"><i></i></div>
+          <div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+        </div>
+        <a class="lab" href="how-does-a-machine-learn.html" target="_blank" rel="noopener">Start with Lab 03 <span class="larr">→</span></a>
+      </div>
+
+      <div class="job reveal" style="--acc:var(--violet)" data-demand="4">
+        <div class="top"><span class="ico">🎮</span><span class="pay">$90–165k</span></div>
+        <h3>Game / Graphics Developer</h3>
+        <p class="tagline">"I make worlds move at 60 fps."</p>
+        <p>Every vertex, camera and animation is a transform matrix. Quaternions stop the spinning. Your lab's p′ = A·p is literally frame one.</p>
+        <div class="chips"><span class="chip">M·V·P</span><span class="chip">quaternions</span><span class="chip">projection</span></div>
+        <div class="meter">
+          <div class="m-top"><span>Demand</span><span>High</span></div>
+          <div class="bar"><i></i></div>
+          <div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+        </div>
+        <a class="lab" href="image-matrix-lab.html" target="_blank" rel="noopener">Start with Lab 01 <span class="larr">→</span></a>
+      </div>
+
+      <div class="job reveal" style="--acc:var(--amber)" data-demand="4">
+        <div class="top"><span class="ico">🦾</span><span class="pay">$100–175k</span></div>
+        <h3>Robotics Engineer</h3>
+        <p class="tagline">"I give machines a body and a brain."</p>
+        <p>Kinematics chains rotation matrices down the arm; the Jacobian tells the motors what to do. SLAM literally localizes a robot in matrix space.</p>
+        <div class="chips"><span class="chip">rotation R</span><span class="chip">Jacobian J</span><span class="chip">SLAM</span></div>
+        <div class="meter">
+          <div class="m-top"><span>Demand</span><span>High</span></div>
+          <div class="bar"><i></i></div>
+          <div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+        </div>
+        <a class="lab" href="image-matrix-lab.html" target="_blank" rel="noopener">Start with Lab 01 <span class="larr">→</span></a>
+      </div>
+
+      <div class="job reveal" style="--acc:var(--pink)" data-demand="5">
+        <div class="top"><span class="ico">👁️</span><span class="pay">$110–185k</span></div>
+        <h3>Computer Vision Engineer</h3>
+        <p class="tagline">"I teach computers to see."</p>
+        <p>An image is a matrix; a face is an eigenface; a filter is a convolution. Self-driving cars are just vision engineers' matrices going fast.</p>
+        <div class="chips"><span class="chip">image = matrix</span><span class="chip">eigenfaces</span><span class="chip">convolution</span></div>
+        <div class="meter">
+          <div class="m-top"><span>Demand</span><span>Extreme 🔥</span></div>
+          <div class="bar"><i></i></div>
+          <div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+        </div>
+        <a class="lab" href="image-matrix-lab.html" target="_blank" rel="noopener">Start with Lab 01 <span class="larr">→</span></a>
+      </div>
+
+      <div class="job reveal" style="--acc:var(--blue)" data-demand="4">
+        <div class="top"><span class="ico">🔐</span><span class="pay">$120–210k</span></div>
+        <h3>Cryptographer</h3>
+        <p class="tagline">"I build locks that math can't pick."</p>
+        <p>Modern post-quantum cryptography lives inside lattice problems — systems of linear equations engineered to be hard. Matrices are the weapon and the shield.</p>
+        <div class="chips"><span class="chip">lattices</span><span class="chip">LWE: c = A·s + e</span><span class="chip">finite fields</span></div>
+        <div class="meter">
+          <div class="m-top"><span>Demand</span><span>High</span></div>
+          <div class="bar"><i></i></div>
+          <div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+        </div>
+        <a class="lab" href="build-a-mini-google.html" target="_blank" rel="noopener">Start with Lab 02 <span class="larr">→</span></a>
+      </div>
+
+      <div class="job reveal" style="--acc:var(--green)" data-demand="4">
+        <div class="top"><span class="ico">💹</span><span class="pay">$130–260k</span></div>
+        <h3>Quantitative Analyst</h3>
+        <p class="tagline">"I find edges in the market's matrices."</p>
+        <p>Covariance matrices model risk; eigen-portfolios are literally built from eigenvectors of the market. You'll think in eigenvalues before breakfast.</p>
+        <div class="chips"><span class="chip">Σ covariance</span><span class="chip">eigen-portfolios</span><span class="chip">factor models</span></div>
+        <div class="meter">
+          <div class="m-top"><span>Demand</span><span>High</span></div>
+          <div class="bar"><i></i></div>
+          <div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+        </div>
+        <a class="lab" href="build-a-mini-google.html" target="_blank" rel="noopener">Start with Lab 02 <span class="larr">→</span></a>
+      </div>
+
+      <div class="job reveal" style="--acc:var(--cyan)" data-demand="4">
+        <div class="top"><span class="ico">🧬</span><span class="pay">$90–155k</span></div>
+        <h3>Computational Biologist</h3>
+        <p class="tagline">"I find the signal in living systems."</p>
+        <p>Genomes are long vectors; SVD and PCA separate disease subtypes from noise. MRI reconstruction is solving A·x = b inside your body.</p>
+        <div class="chips"><span class="chip">SVD</span><span class="chip">genomics</span><span class="chip">MRI = A·x = b</span></div>
+        <div class="meter">
+          <div class="m-top"><span>Demand</span><span>High</span></div>
+          <div class="bar"><i></i></div>
+          <div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+        </div>
+        <a class="lab" href="image-matrix-lab.html" target="_blank" rel="noopener">Start with Lab 01 <span class="larr">→</span></a>
+      </div>
+
+      <div class="job reveal" style="--acc:var(--violet)" data-demand="4">
+        <div class="top"><span class="ico">🌐</span><span class="pay">$105–170k</span></div>
+        <h3>Search / Network Engineer</h3>
+        <p class="tagline">"I rank and route the internet."</p>
+        <p>PageRank, spectral clustering, graph embeddings — networks are matrices, and their eigenvectors reveal communities, authorities and shortest paths.</p>
+        <div class="chips"><span class="chip">P·r = r</span><span class="chip">spectral clustering</span><span class="chip">graphs</span></div>
+        <div class="meter">
+          <div class="m-top"><span>Demand</span><span>High</span></div>
+          <div class="bar"><i></i></div>
+          <div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+        </div>
+        <a class="lab" href="build-a-mini-google.html" target="_blank" rel="noopener">Start with Lab 02 <span class="larr">→</span></a>
+      </div>
+
+      <div class="job reveal" style="--acc:var(--amber)" data-demand="3">
+        <div class="top"><span class="ico">🧊</span><span class="pay">$100–165k</span></div>
+        <h3>Simulation / CFD Engineer</h3>
+        <p class="tagline">"I predict physics before it happens."</p>
+        <p>Weather, aerodynamics, crash tests — every simulation is solving huge linear systems A·x = b millions of times. Fast matrix math saves lives.</p>
+        <div class="chips"><span class="chip">A·x = b</span><span class="chip">finite elements</span><span class="chip">solvers</span></div>
+        <div class="meter">
+          <div class="m-top"><span>Demand</span><span>Steady</span></div>
+          <div class="bar"><i></i></div>
+          <div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+        </div>
+        <a class="lab" href="how-does-a-machine-learn.html" target="_blank" rel="noopener">Start with Lab 03 <span class="larr">→</span></a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ SALARY COMPARISON ============ -->
+  <section class="salary-sec">
+    <h2 class="reveal">What the math pays</h2>
+    <p class="sub reveal">Typical senior-level salary (USD, illustrative). The matrix is your résumé.</p>
+    <div class="salary-box reveal" id="salaryBox">
+      <div class="srow" data-w="78"><span class="name">Quantitative Analyst</span><span class="bar"><i></i></span><span class="val">$195k</span></div>
+      <div class="srow" data-w="66"><span class="name">Cryptographer</span><span class="bar"><i></i></span><span class="val">$165k</span></div>
+      <div class="srow" data-w="60"><span class="name">Machine Learning Eng.</span><span class="bar"><i></i></span><span class="val">$150k</span></div>
+      <div class="srow" data-w="58"><span class="name">Computer Vision Eng.</span><span class="bar"><i></i></span><span class="val">$145k</span></div>
+      <div class="srow" data-w="56"><span class="name">Robotics Engineer</span><span class="bar"><i></i></span><span class="val">$140k</span></div>
+      <div class="srow" data-w="56"><span class="name">Search / Network Eng.</span><span class="bar"><i></i></span><span class="val">$140k</span></div>
+      <div class="srow" data-w="54"><span class="name">Data Scientist</span><span class="bar"><i></i></span><span class="val">$135k</span></div>
+      <div class="srow" data-w="52"><span class="name">Simulation / CFD Eng.</span><span class="bar"><i></i></span><span class="val">$130k</span></div>
+      <div class="srow" data-w="48"><span class="name">Game / Graphics Dev.</span><span class="bar"><i></i></span><span class="val">$120k</span></div>
+      <div class="srow" data-w="48"><span class="name">Computational Biologist</span><span class="bar"><i></i></span><span class="val">$120k</span></div>
+    </div>
+  </section>
+
+  <!-- ============ PILLARS ============ -->
+  <section class="pillars-sec">
+    <h2 class="reveal">One course. Three ideas. All careers.</h2>
+    <p class="sub reveal">Every career above is built on the same three pillars — the exact things you'll build by hand in the labs.</p>
+    <div class="pgrid">
+      <div class="pillar reveal">
+        <span class="pnum">PILLAR 01</span>
+        <span class="pico">🧭</span>
+        <h3>Vectors are data</h3>
+        <p>A photo, a song, a user, a webpage — anything can be a list of numbers in space. Distance, angle and direction become tools, not metaphors.</p>
+        <div class="peq">x = (x₁, x₂, …, xₙ)</div>
+      </div>
+      <div class="pillar reveal">
+        <span class="pnum">PILLAR 02</span>
+        <span class="pico">🔄</span>
+        <h3>Matrices are transformations</h3>
+        <p>Rotating a camera, training a model, ranking a web — all of it is multiplying by the right matrix. Learn one operation, understand a thousand systems.</p>
+        <div class="peq">p′ = A · p</div>
+      </div>
+      <div class="pillar reveal">
+        <span class="pnum">PILLAR 03</span>
+        <span class="pico">💎</span>
+        <h3>Eigenvalues are structure</h3>
+        <p>Some directions barely change when a matrix acts on them. Those are the stable directions — of the web, of risk, of data. Find them, and you've found the truth.</p>
+        <div class="peq">A · v = λ · v</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="cta-sec">
+    <h2 class="reveal">Your career starts with one lab</h2>
+    <p class="reveal">No account, no install, no lecture. Just open a simulation and start building.</p>
+    <div class="cta-row reveal">
+      <a class="cta-btn" href="image-matrix-lab.html" target="_blank" rel="noopener">🖼️ Lab 01 — Image Matrix</a>
+      <a class="cta-btn" href="build-a-mini-google.html" target="_blank" rel="noopener">🔍 Lab 02 — Mini Google</a>
+      <a class="cta-btn alt" href="how-does-a-machine-learn.html" target="_blank" rel="noopener">🧠 Lab 03 — Machine Learn</a>
+    </div>
+    <div style="margin-top:18px"><a class="cta-btn alt" href="index.html">⬡ Back to the hub</a></div>
+  </section>
+</main>
+
+<footer>
+  <b>FREEAI</b> · Linear Algebra &amp; Calculus course orientation · built for 3rd-semester BTech AI/ML
+</footer>
+
+<script>
+/* ============================================================
+   SELF-CONTAINED 3D BACKGROUND — zero libraries.
+   An animated neural wave grid coloured by height, a Matrix-style
+   rain of glyphs, twinkling particles, nebulae and streaks —
+   every point is a vector pushed through a perspective camera:
+   linear algebra, rendered live.
+   ============================================================ */
+(function(){
+  'use strict';
+  try{
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){ document.body.classList.add('no3d'); return; }
+    var host = document.getElementById('bg3d');
+    var cv = document.createElement('canvas');
+    var ctx = cv.getContext('2d');
+    if (!ctx || !host){ document.body.classList.add('no3d'); return; }
+    host.appendChild(cv);
+    var W = 0, H = 0, focal = 1, DPR = Math.min(window.devicePixelRatio || 1, 2);
+    function resize(){
+      W = innerWidth; H = innerHeight;
+      cv.width = Math.max(1, Math.round(W*DPR)); cv.height = Math.max(1, Math.round(H*DPR));
+      cv.style.width = W + 'px'; cv.style.height = H + 'px';
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      focal = H*.866;
+    }
+    addEventListener('resize', resize); resize();
+
+    var P = [0,0,0];
+    function project(x, y, z, camX, camY, camZ, ox, oy){
+      var dx = x-camX, dy = y-camY, dz = z-camZ;
+      var s = focal/(-dz);            /* px per world unit */
+      P[0] = W/2 + ox + dx*s; P[1] = H/2 + oy - dy*s; P[2] = s;
+      return P;
+    }
+    function lerp(a, b, k){ return a + (b-a)*k; }
+
+    /* ---- wave grid: 111 × 61 control points ---- */
+    var GX = 92, GY = 52, GW = 17, GH = 10, grid = [], j, i;
+    for (j = 0; j <= GY; j++){
+      var row = [], y = -GH + (j/GY)*GH*2;
+      for (i = 0; i <= GX; i++) row.push([-GW + (i/GX)*GW*2, y]);
+      grid.push(row);
+    }
+    var tiltC = Math.cos(-Math.PI/2.6), tiltS = Math.sin(-Math.PI/2.6);
+    function wavePt(v, t){
+      var z = Math.sin(v[0]*.42 + t*1.1)*.55*Math.cos(v[1]*.5 + t*.8) + Math.sin(v[0]*.9 - t*1.7)*.18;
+      return [v[0], v[1]*tiltC - z*tiltS, v[1]*tiltS + z*tiltC - 6, z];
+    }
+    /* height -> colour: cyan -> green -> violet (local wave height ≈ [-.73, .73])
+       quantised into a small palette so rows can share strokes */
+    var wavePal = [];
+    for (var pz = 0; pz <= 10; pz++){
+      var pk = pz/10, pr_, pg_, pb_;
+      if (pk < .5){ var pk2 = pk*2; pr_ = Math.round(lerp(34, 52, pk2)); pg_ = 211; pb_ = Math.round(lerp(238, 153, pk2)); }
+      else { var pk3 = (pk-.5)*2; pr_ = Math.round(lerp(52, 167, pk3)); pg_ = Math.round(lerp(211, 139, pk3)); pb_ = Math.round(lerp(153, 250, pk3)); }
+      wavePal.push('rgba(' + pr_ + ',' + pg_ + ',' + pb_ + ',.38)');
+    }
+    function waveColorIdx(z){
+      var k = Math.max(0, Math.min(1, (z + .73)/1.46));
+      return Math.round(k*10);
+    }
+
+    /* ---- Matrix-style rain ---- */
+    var rainGlyphs = 'アイウエオカキクケコサシスセソタチツテト0123456789ABCDEF<>$#@+=*';
+    var rain = [];
+    function randGlyph(){ return rainGlyphs[(Math.random()*rainGlyphs.length)|0]; }
+    function resizeRain(){
+      rain.length = 0;
+      var cols = Math.max(22, Math.min(44, Math.floor(W/22)));
+      for (i = 0; i < cols; i++){
+        var ch = 6 + ((Math.random()*14)|0), glyphs = [];
+        for (var g = 0; g < ch; g++) glyphs.push(randGlyph());
+        rain.push({x:Math.random()*W, y:Math.random()*H, sp:90+Math.random()*260, ch:ch, g:glyphs, m:0});
+      }
+    }
+    resizeRain();
+    addEventListener('resize', resizeRain);
+    function drawRain(){
+      ctx.font = '13px "JetBrains Mono", Menlo, monospace';
+      ctx.textAlign = 'center';
+      for (var i = 0; i < rain.length; i++){
+        var c = rain[i];
+        c.y += c.sp*.016;
+        if (c.y - c.ch*16 > H){
+          c.y = -Math.random()*260; c.x = Math.random()*W; c.sp = 90+Math.random()*260;
+          for (var g2 = 0; g2 < c.ch; g2++) c.g[g2] = randGlyph();
+        }
+        c.m = (c.m + 1) % 3;
+        for (var k = 0; k < c.ch; k++){
+          var gy = c.y - k*16;
+          if (gy < -12 || gy > H + 12) continue;
+          if (c.m === 0 && Math.random() < .14) c.g[k] = randGlyph();
+          ctx.globalAlpha = .05 + .5*(1 - k/c.ch);
+          ctx.fillStyle = k === 0 ? '#d1fff2' : '#34d399';
+          ctx.fillText(c.g[k], c.x, gy);
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    /* ---- drifting twinkling particles ---- */
+    var drift = [], k;
+    for (k = 0; k < 650; k++) drift.push([(Math.random()-.5)*44, (Math.random()-.5)*26, -4-Math.random()*22, .4+Math.random()*1.6, Math.random()*6.2832]);
+    function drawDrift(t, camX, camY, camZ, ox, oy){
+      ctx.fillStyle = '#4f8cff';
+      for (k = 0; k < drift.length; k++){
+        var v = drift[k];
+        var pp = project(v[0], v[1], v[2], camX, camY, camZ, ox, oy);
+        var twi = .5 + .5*Math.sin(t*v[3] + v[4]);
+        ctx.globalAlpha = .6*(.4 + .6*twi);
+        var r = Math.max(.4, .05*pp[2]*(.65 + .5*twi));
+        ctx.fillRect(pp[0]-r, pp[1]-r, r*2, r*2);
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    /* ---- nebulae + streaks ---- */
+    function nebula(x, y, z, r, rgb, a){
+      return {x:x, y:y, z:z, r:r, c:rgb, a:a, dx:Math.random()*6.28, dy:Math.random()*6.28,
+        draw(camX, camY, camZ, ox, oy, t){
+          var nx = this.x + Math.sin(t*.13 + this.dx)*1.4;
+          var ny = this.y + Math.cos(t*.11 + this.dy)*.9;
+          var pp = project(nx, ny, this.z, camX, camY, camZ, ox, oy);
+          var pr = Math.max(40, this.r*pp[2]);
+          var g = ctx.createRadialGradient(pp[0], pp[1], 0, pp[0], pp[1], pr);
+          g.addColorStop(0, 'rgba(' + this.c + ',' + this.a + ')');
+          g.addColorStop(.55, 'rgba(' + this.c + ',' + (this.a*.35) + ')');
+          g.addColorStop(1, 'rgba(' + this.c + ',0)');
+          ctx.fillStyle = g;
+          ctx.beginPath(); ctx.arc(pp[0], pp[1], pr, 0, 6.2832); ctx.fill();
+        }};
+    }
+    var neb = [
+      nebula(-8, 1, -16, 7, '34,211,238', .09),
+      nebula(8, -2, -18, 8, '52,211,153', .07),
+      nebula(0, 6, -14, 6, '167,139,250', .07)
+    ];
+    var streakBox = [34, 22], streakSpd = 30;
+    var streakData = [];
+    for (i = 0; i < 8; i++) streakData.push(spawnStreak());
+    function spawnStreak(){
+      var dir = Math.random()*Math.PI*2;
+      return {x:(Math.random()-.5)*streakBox[0], y:(Math.random()-.5)*streakBox[1], z:-6-Math.random()*12,
+        dx:Math.cos(dir), dy:Math.sin(dir), sp:streakSpd*(.6+Math.random()*1.2), ln:.8+Math.random()*1.3};
+    }
+    function drawStreaks(camX, camY, camZ, ox, oy){
+      ctx.strokeStyle = '#34d399'; ctx.globalAlpha = .2; ctx.lineWidth = 1.3;
+      for (var i = 0; i < streakData.length; i++){
+        var st = streakData[i];
+        st.x += st.dx*st.sp*.016; st.y += st.dy*st.sp*.016;
+        if (Math.abs(st.x) > streakBox[0]/2 || Math.abs(st.y) > streakBox[1]/2) streakData[i] = spawnStreak();
+        var h = project(st.x, st.y, st.z, camX, camY, camZ, ox, oy);
+        var tl = project(st.x - st.dx*st.ln, st.y - st.dy*st.ln, st.z, camX, camY, camZ, ox, oy);
+        ctx.beginPath(); ctx.moveTo(h[0], h[1]); ctx.lineTo(tl[0], tl[1]); ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    var mx = 0, my = 0, tx = 0, ty = 0;
+    addEventListener('pointermove', function(e){ tx = (e.clientX/innerWidth-.5)*.7; ty = (e.clientY/innerHeight-.5)*.4; });
+
+    var t0 = performance.now();
+    function frame(){
+      var t = (performance.now()-t0)/1000;
+      var camX = mx*1.8, camY = 2.2 + my*1.2, camZ = 10;
+      var tp = project(0, 0, -2, camX, camY, camZ, 0, 0);
+      var ox = W/2 - tp[0], oy = H/2 - tp[1];
+      ctx.clearRect(0, 0, W, H);
+
+      for (var b = 0; b < neb.length; b++) neb[b].draw(camX, camY, camZ, ox, oy, t);
+
+      /* project the whole grid once, tracking row heights */
+      var pr = [], rowZ = new Array(GY+1);
+      for (j = 0; j <= GY; j++){
+        var rrow = [];
+        var zsum = 0;
+        for (i = 0; i <= GX; i++){
+          var wv = wavePt(grid[j][i], t);
+          zsum += wv[3];
+          var pp = project(wv[0], wv[1], wv[2], camX, camY, camZ, ox, oy);
+          rrow.push([pp[0], pp[1], pp[2]]);
+        }
+        rowZ[j] = zsum/(GX+1);
+        pr.push(rrow);
+      }
+
+      /* wireframe rows coloured by wave height, grouped into palette buckets */
+      ctx.lineWidth = 1;
+      var buckets = [], q;
+      for (j = 0; j <= GY; j++){
+        var idx = waveColorIdx(rowZ[j]);
+        if (!buckets[idx]) buckets[idx] = new Path2D();
+        var rp = buckets[idx];
+        rp.moveTo(pr[j][0][0], pr[j][0][1]);
+        for (q = 1; q <= GX; q++) rp.lineTo(pr[j][q][0], pr[j][q][1]);
+      }
+      for (var bi = 0; bi < buckets.length; bi++){
+        if (buckets[bi]){ ctx.strokeStyle = wavePal[bi]; ctx.stroke(buckets[bi]); }
+      }
+      /* faint vertical columns */
+      ctx.strokeStyle = 'rgba(34,211,238,.09)';
+      var cols = new Path2D(), q2;
+      for (i = 0; i <= GX; i++){ cols.moveTo(pr[0][i][0], pr[0][i][1]); for (q2 = 1; q2 <= GY; q2++) cols.lineTo(pr[q2][i][0], pr[q2][i][1]); }
+      ctx.stroke(cols);
+
+      /* glowing lattice points */
+      ctx.fillStyle = '#34d399';
+      ctx.globalCompositeOperation = 'lighter';
+      for (j = 0; j <= GY; j += 3){
+        for (i = 0; i <= GX; i += 3){
+          var gp = pr[j][i], rr = Math.max(.4, .045*gp[2]);
+          ctx.globalAlpha = .75;
+          ctx.fillRect(gp[0]-rr, gp[1]-rr, rr*2, rr*2);
+        }
+      }
+      ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+
+      /* rain + drift + streaks (additive) */
+      ctx.globalCompositeOperation = 'lighter';
+      drawRain();
+      drawDrift(t, camX, camY, camZ, ox, oy);
+      drawStreaks(camX, camY, camZ, ox, oy);
+      ctx.globalCompositeOperation = 'source-over';
+
+      mx += (tx-mx)*.05; my += (ty-my)*.05;
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }catch(err){ document.body.classList.add('no3d'); }
+})();
+</script>
+
+<script>
+/* ============================================================
+   SCROLL REVEAL + DEMAND BARS + SALARY BARS
+   ============================================================ */
+var io = new IntersectionObserver(function(entries){
+  entries.forEach(function(en){
+    if (!en.isIntersecting) return;
+    en.target.classList.add('in');
+    if (en.target.classList.contains('job')){
+      var bar = en.target.querySelector('.meter .bar i');
+      var demand = parseInt(en.target.getAttribute('data-demand'),10);
+      if (bar) setTimeout(function(){ bar.style.width = (demand*20)+'%'; }, 120);
+    }
+    io.unobserve(en.target);
+  });
+},{threshold:.15});
+document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+var salarySeen = false;
+var sio = new IntersectionObserver(function(entries){
+  entries.forEach(function(en){
+    if (en.isIntersecting && !salarySeen){
+      salarySeen = true;
+      document.querySelectorAll('#salaryBox .srow').forEach(function(row, idx){
+        setTimeout(function(){
+          row.querySelector('.bar i').style.width = row.getAttribute('data-w') + '%';
+        }, idx*110);
+      });
+    }
+  });
+},{threshold:.3});
+sio.observe(document.getElementById('salaryBox'));
+
+/* ============================================================
+   SUBTLE TILT ON JOB CARDS
+   ============================================================ */
+if (window.matchMedia('(pointer:fine)').matches){
+  document.querySelectorAll('.job').forEach(function(card){
+    card.addEventListener('pointermove', function(e){
+      var r = card.getBoundingClientRect();
+      var px = (e.clientX - r.left)/r.width - .5;
+      var py = (e.clientY - r.top)/r.height - .5;
+      card.style.transform = 'perspective(800px) rotateX(' + (-py*4).toFixed(2) + 'deg) rotateY(' + (px*5).toFixed(2) + 'deg) translateY(-4px)';
+    });
+    card.addEventListener('pointerleave', function(){ card.style.transform = ''; });
+  });
+}
+
+/* ============================================================
+   CURSOR GLOW + SCROLL PROGRESS + NAV STATE
+   ============================================================ */
+var cglow = document.querySelector('.cglow');
+if (cglow && window.matchMedia && window.matchMedia('(pointer:fine)').matches){
+  addEventListener('pointermove', function(e){
+    cglow.style.transform = 'translate(' + (e.clientX-260) + 'px,' + (e.clientY-260) + 'px)';
+    cglow.style.opacity = 1;
+  }, {passive:true});
+  addEventListener('pointerleave', function(){ cglow.style.opacity = 0; });
+}
+var sprog = document.querySelector('.sprog i');
+addEventListener('scroll', function(){
+  var h = document.documentElement.scrollHeight - innerHeight;
+  if (sprog) sprog.style.width = (h > 0 ? (window.scrollY/h)*100 : 0) + '%';
+  document.querySelectorAll('nav').forEach(function(n){ n.classList.toggle('scrolled', window.scrollY > 30); });
+}, {passive:true});
+</script>
+</body>
+</html>
