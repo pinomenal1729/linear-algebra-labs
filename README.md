@@ -4,6 +4,7 @@ Static website for GitHub Pages.
 
 ## Main pages
 - `index.html` — main hub
+- `course-overview-slides.html` — interactive Lecture 0 overview deck
 - `why-linear-algebra.html` — start here page
 - `glossary.html` — beginner glossary
 - `applications.html` — real-world applications

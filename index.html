@@ -452,6 +452,19 @@ nav.scrolled{background:rgba(5,8,15,.9);box-shadow:0 6px 26px rgba(0,0,0,.45)}
 .study-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}@media(max-width:980px){.study-grid{grid-template-columns:1fr}}
 .study-card h3{font-size:20px;margin-bottom:8px}.study-card ul{padding-left:18px;color:var(--dim)}.study-card li+li{margin-top:8px}
 
+
+.overview-sec{max-width:1200px;margin:0 auto;padding:10px 20px 30px}
+.overview-card{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;background:linear-gradient(180deg,rgba(14,22,40,.92),rgba(9,14,25,.95));border:1px solid var(--line);border-radius:24px;padding:22px;position:relative;overflow:hidden}
+.overview-card::after{content:'';position:absolute;inset:auto -80px -80px auto;width:220px;height:220px;background:radial-gradient(circle,rgba(79,209,255,.14),transparent 64%)}
+.overview-preview{min-height:280px;border-radius:22px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(79,209,255,.05),rgba(255,255,255,.02));position:relative;overflow:hidden}
+.overview-preview::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(79,209,255,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(79,209,255,.10) 1px,transparent 1px);background-size:34px 34px;opacity:.4}
+.overview-title{position:absolute;left:22px;top:20px;font-size:clamp(26px,4vw,44px);font-family:var(--disp);line-height:1.02;background:linear-gradient(90deg,#fff,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.ov-chip{position:absolute;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(16,22,38,.86);font-family:var(--mono);font-size:12px;color:var(--dim)}
+.ov-chip.c1{left:24px;bottom:26px}.ov-chip.c2{left:170px;bottom:26px}.ov-chip.c3{left:315px;bottom:26px}
+.ov-bar{position:absolute;left:24px;right:24px;top:102px;height:10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.05);overflow:hidden}.ov-bar i{display:block;height:100%;width:62%;background:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink));border-radius:999px}
+.ov-slides{position:absolute;left:24px;right:24px;top:132px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.ov-s{height:88px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.03);padding:10px}.ov-s b{display:block;font-size:11px;color:var(--cyan);margin-bottom:6px}.ov-s span{display:block;font-size:12px;color:var(--dim);line-height:1.4}
+@media(max-width:980px){.overview-card{grid-template-columns:1fr}.ov-slides{grid-template-columns:1fr 1fr}.ov-chip.c3{left:24px;bottom:68px}}
+
 </style>
 </head>
 <body>
@@ -465,6 +478,7 @@ nav.scrolled{background:rgba(5,8,15,.9);box-shadow:0 6px 26px rgba(0,0,0,.45)}
   <div class="nav-links">
     <a class="on" href="index.html">⚡ <span>Hub</span></a>
     <a href="#showcase">🧪 <span>Labs</span></a>
+    <a href="course-overview-slides.html">🎞️ <span>Overview</span></a>
     <a href="why-linear-algebra.html">🧭 <span>Start Here</span></a>
     <a href="glossary.html">📘 <span>Glossary</span></a>
     <a href="applications.html">🌌 <span>Applications</span></a>
@@ -650,6 +664,39 @@ nav.scrolled{background:rgba(5,8,15,.9);box-shadow:0 6px 26px rgba(0,0,0,.45)}
       <div class="study-card reveal"><h3>📘 Beginner Glossary</h3><ul><li>Simple meanings of important terms.</li><li>Examples for each word.</li><li>Search any concept quickly.</li></ul><div class="quick-links"><a class="pill-link" href="glossary.html">Open glossary</a></div></div>
       <div class="study-card reveal"><h3>🧭 Start Here Page</h3><ul><li>Explains why linear algebra had to be invented.</li><li>Tells students how to use the site in the right order.</li><li>Reduces fear before formal learning.</li></ul><div class="quick-links"><a class="pill-link" href="why-linear-algebra.html">Open start page</a></div></div>
       <div class="study-card reveal"><h3>🧪 Lab Companions</h3><ul><li>Curiosity questions before each lab.</li><li>Quick checks, reflection prompts, and challenge tasks.</li><li>Common mistakes and real-world relevance.</li></ul><div class="quick-links"><a class="pill-link" href="recommendation-engine-lab.html">See an example</a></div></div>
+    </div>
+  </section>
+
+
+
+  <section class="overview-sec">
+    <h2 class="reveal" style="text-align:center;font-family:var(--disp);font-size:clamp(28px,4vw,44px);margin-bottom:8px">Lecture 0 overview <span style="color:var(--cyan)">as an interactive slide experience</span></h2>
+    <p class="sub reveal" style="max-width:820px;margin:0 auto 22px;color:var(--dim);text-align:center">For your very first lecture, students can open a guided visual slide deck that introduces the full course journey in an engaging, one-slide-at-a-time format.</p>
+    <div class="overview-card reveal">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);font-family:var(--mono);font-size:12px;color:var(--cyan);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">🎞️ Lecture 0 • 24 slides</div>
+        <h3 style="font-size:30px;margin-bottom:10px">A cinematic overview of the entire M3 course</h3>
+        <p style="color:var(--dim);line-height:1.7">This interactive deck walks students through the promise of the course, the learning mindset, the three pillars of M3, the major ideas in linear algebra, calculus, and optimization, and the real-world applications that connect everything together.</p>
+        <div class="bullets" style="margin-top:16px">
+          <div class="bullet"><div class="bnum">1</div><div><b>One slide at a time</b><div class="body">Students move using next/previous controls, keyboard arrows, or the slide map.</div></div></div>
+          <div class="bullet"><div class="bnum">2</div><div><b>Visually engaging</b><div class="body">Animated visual panels help the lecture feel like an experience, not just a PDF.</div></div></div>
+          <div class="bullet"><div class="bnum">3</div><div><b>Perfect for the first lecture</b><div class="body">Use it to build excitement before diving into the labs and worksheets.</div></div></div>
+        </div>
+        <div class="quick-links" style="margin-top:16px"><a class="pill-link" href="course-overview-slides.html">🎞️ Open the slide overview</a><a class="pill-link" href="why-linear-algebra.html">🧭 Pair it with Start Here</a></div>
+      </div>
+      <a class="overview-preview" href="course-overview-slides.html" aria-label="Open course overview slides">
+        <div class="overview-title">OPEN THE<br/>MACHINE</div>
+        <div class="ov-bar"><i></i></div>
+        <div class="ov-slides">
+          <div class="ov-s"><b>Slide 01</b><span>Why this course matters</span></div>
+          <div class="ov-s"><b>Slide 08</b><span>How we will learn</span></div>
+          <div class="ov-s"><b>Slide 14</b><span>Linear algebra roadmap</span></div>
+          <div class="ov-s"><b>Slide 21</b><span>Bridge to AI applications</span></div>
+        </div>
+        <div class="ov-chip c1">24 animated slides</div>
+        <div class="ov-chip c2">Keyboard navigation</div>
+        <div class="ov-chip c3">Visual course map</div>
+      </a>
     </div>
   </section>
 
