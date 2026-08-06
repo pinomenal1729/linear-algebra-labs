@@ -4,7 +4,6 @@ Static website for GitHub Pages.
 
 ## Main pages
 - `index.html` — main hub
-- `course-overview-slides.html` — interactive Lecture 0 overview deck
 - `why-linear-algebra.html` — start here page
 - `glossary.html` — beginner glossary
 - `applications.html` — real-world applications
@@ -22,3 +21,7 @@ All files should stay in the repository root for GitHub Pages.
 - Lab 04 is now a one-screen-at-a-time guided experience.
 - Removed the homepage top lab-count banner.
 - Footer branding updated to Anupam | MathSphere.
+
+## Social links
+- LinkedIn: Anupam Nigam
+- YouTube: @pi_nomenal1729
